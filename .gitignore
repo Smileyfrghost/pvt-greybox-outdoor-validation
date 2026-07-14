@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Generated research outputs
+results/**
+!results/README.md
+
+# Real experiment files are deliberately excluded until release rights and a data licence are confirmed.
+data/raw/
+data/experimental_clean_v1.csv
+
+# Local/private source material
+paper/source_materials/
+*.docx
+*.xlsx
+*.xls
+*.opju
+*.slx
+*.pth
+*.zip
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

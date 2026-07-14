@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the archived release and associated manuscript when available."
+title: "Outdoor PV/T Grey-Box Modeling"
+type: software
+authors:
+  - family-names: Zheng
+    given-names: Yichen
+version: 0.1.0
+date-released: 2026-07-14
+repository-code: "https://github.com/Smileyfrghost/pvt-greybox-outdoor-validation"

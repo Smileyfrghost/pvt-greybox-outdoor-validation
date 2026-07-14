@@ -1,0 +1,209 @@
+{
+  "source": "original experiment logger files",
+  "channel_definition": [
+    "panel temperature",
+    "tank temperature",
+    "inlet temperature",
+    "irradiance",
+    "logger time"
+  ],
+  "rows_total": 41599,
+  "rows_valid": 41578,
+  "days": {
+    "3.16": {
+      "flow_ml_min": 300.0,
+      "rows": 2483,
+      "invalid_sensor_rows": 0,
+      "active_rows": 2483,
+      "exact_duplicate_rows": 0,
+      "duration_h": 1.74,
+      "median_step_s": 2.5,
+      "panel_temperature_range_C": [
+        16.4,
+        33.9
+      ],
+      "inlet_temperature_range_C": [
+        16.6,
+        21.9
+      ],
+      "irradiance_range_W_m2": [
+        104.7,
+        786.0
+      ]
+    },
+    "3.17": {
+      "flow_ml_min": 300.0,
+      "rows": 2690,
+      "invalid_sensor_rows": 0,
+      "active_rows": 2682,
+      "exact_duplicate_rows": 0,
+      "duration_h": 1.625,
+      "median_step_s": 2.1,
+      "panel_temperature_range_C": [
+        18.0,
+        27.4
+      ],
+      "inlet_temperature_range_C": [
+        12.3,
+        18.5
+      ],
+      "irradiance_range_W_m2": [
+        27.9,
+        667.6
+      ]
+    },
+    "3.18": {
+      "flow_ml_min": 300.0,
+      "rows": 6267,
+      "invalid_sensor_rows": 0,
+      "active_rows": 5945,
+      "exact_duplicate_rows": 0,
+      "duration_h": 6.905,
+      "median_step_s": 4.4,
+      "panel_temperature_range_C": [
+        3.6,
+        34.3
+      ],
+      "inlet_temperature_range_C": [
+        5.3,
+        20.5
+      ],
+      "irradiance_range_W_m2": [
+        21.2,
+        1025.9
+      ]
+    },
+    "3.19": {
+      "flow_ml_min": 300.0,
+      "rows": 5472,
+      "invalid_sensor_rows": 0,
+      "active_rows": 5470,
+      "exact_duplicate_rows": 0,
+      "duration_h": 6.218,
+      "median_step_s": 4.3,
+      "panel_temperature_range_C": [
+        12.1,
+        36.1
+      ],
+      "inlet_temperature_range_C": [
+        8.7,
+        24.4
+      ],
+      "irradiance_range_W_m2": [
+        27.2,
+        1019.0
+      ]
+    },
+    "3.20": {
+      "flow_ml_min": 300.0,
+      "rows": 5460,
+      "invalid_sensor_rows": 0,
+      "active_rows": 5460,
+      "exact_duplicate_rows": 0,
+      "duration_h": 6.792,
+      "median_step_s": 4.8,
+      "panel_temperature_range_C": [
+        11.6,
+        44.7
+      ],
+      "inlet_temperature_range_C": [
+        8.7,
+        22.9
+      ],
+      "irradiance_range_W_m2": [
+        169.1,
+        1052.3
+      ]
+    },
+    "3.21": {
+      "flow_ml_min": 300.0,
+      "rows": 4227,
+      "invalid_sensor_rows": 0,
+      "active_rows": 4227,
+      "exact_duplicate_rows": 0,
+      "duration_h": 5.056,
+      "median_step_s": 4.4,
+      "panel_temperature_range_C": [
+        19.2,
+        38.2
+      ],
+      "inlet_temperature_range_C": [
+        8.7,
+        17.3
+      ],
+      "irradiance_range_W_m2": [
+        212.0,
+        921.2
+      ]
+    },
+    "3.22": {
+      "flow_ml_min": 300.0,
+      "rows": 4431,
+      "invalid_sensor_rows": 21,
+      "active_rows": 4312,
+      "exact_duplicate_rows": 0,
+      "duration_h": 5.885,
+      "median_step_s": 5.4,
+      "panel_temperature_range_C": [
+        23.7,
+        69.0
+      ],
+      "inlet_temperature_range_C": [
+        -58.6,
+        19.2
+      ],
+      "irradiance_range_W_m2": [
+        27.0,
+        1115.1
+      ]
+    },
+    "3.25": {
+      "flow_ml_min": 500.0,
+      "rows": 5243,
+      "invalid_sensor_rows": 0,
+      "active_rows": 5243,
+      "exact_duplicate_rows": 0,
+      "duration_h": 5.502,
+      "median_step_s": 4.0,
+      "panel_temperature_range_C": [
+        20.8,
+        61.9
+      ],
+      "inlet_temperature_range_C": [
+        15.2,
+        36.2
+      ],
+      "irradiance_range_W_m2": [
+        222.5,
+        903.3
+      ]
+    },
+    "3.26": {
+      "flow_ml_min": 500.0,
+      "rows": 5326,
+      "invalid_sensor_rows": 0,
+      "active_rows": 5323,
+      "exact_duplicate_rows": 0,
+      "duration_h": 5.914,
+      "median_step_s": 4.1,
+      "panel_temperature_range_C": [
+        25.6,
+        49.1
+      ],
+      "inlet_temperature_range_C": [
+        24.2,
+        37.4
+      ],
+      "irradiance_range_W_m2": [
+        25.3,
+        1034.4
+      ]
+    }
+  },
+  "known_limitations": [
+    "Flow is a day-level set point (300 or 500 mL/min), not a measured time series.",
+    "No outlet-water temperature channel is present; thermal power and thermal efficiency cannot be measured directly.",
+    "No ambient-air temperature channel is present in these logger files.",
+    "Electrical measurements are stored separately and require timestamp-based alignment before use."
+  ]
+}

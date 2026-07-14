@@ -1,0 +1,15 @@
+[project]
+name = "pvt-greybox-outdoor-validation"
+version = "0.1.0"
+description = "Audited data pipeline and whole-day modeling baselines for outdoor PV/T experiments"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24,<3",
+  "pandas>=2.0,<3",
+  "matplotlib>=3.7,<4",
+  "python-docx>=1.1,<2",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
