@@ -1,6 +1,12 @@
 # Outdoor PV/T Grey-Box Modeling
 
+[![Tests](https://github.com/Smileyfrghost/pvt-greybox-outdoor-validation/actions/workflows/tests.yml/badge.svg)](https://github.com/Smileyfrghost/pvt-greybox-outdoor-validation/actions/workflows/tests.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Status](https://img.shields.io/badge/status-research%20prototype-orange)
+
 Reproducible data-processing and baseline modeling code for a small water-cooled photovoltaic/thermal (PV/T) collector tested under transient outdoor conditions.
+
+**Research areas:** photovoltaic-thermal systems, solar energy, transient thermal modeling, grey-box system identification, time-series validation, and reproducible research.
 
 ## Status
 
