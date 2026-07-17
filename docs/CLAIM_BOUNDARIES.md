@@ -6,6 +6,8 @@
 - The observed day-level flow settings are 300 and 500 mL/min.
 - Sensor-range failures can be explicitly flagged without silently dropping samples.
 - Whole-day holdout baselines can be evaluated using code in this repository.
+- Nine electrical exports can be parsed with explicit unit and voltage-current-power checks.
+- Four available XLSX exports exactly match their Markdown counterparts for timestamps, voltage, current, and active power.
 
 ## Not supported by the current measurements
 
@@ -18,4 +20,4 @@
 
 ## Pending work
 
-Electrical voltage, current, and active-power logs exist separately. They must be parsed from the original records, checked for units and timestamp resets, and aligned to the thermal logger with a documented tolerance before electrothermal claims are made.
+Electrical parsing and quality control are complete. Pointwise electro-thermal claims remain pending because only the 2026-03-17 thermal file contains wall-clock timestamps. Correlation-ranked offsets on the other days are exploratory candidates. External start/end anchors or original timestamped serial logs are required before those days enter confirmatory electro-thermal modeling.

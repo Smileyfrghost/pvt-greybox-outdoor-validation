@@ -22,6 +22,7 @@ The five logger values are interpreted as panel temperature, tank temperature, i
 
 | Column | Unit | Meaning |
 |---|---|---|
+| `experiment_date` | ISO date | Stable date identifier that cannot be read as a decimal |
 | `date` | - | Experiment-day label |
 | `flow_ml_min` | mL/min | Day-level flow setting |
 | `flow_kg_s` | kg/s | Converted setting assuming water density of 1 kg/L |
@@ -32,7 +33,17 @@ The five logger values are interpreted as panel temperature, tank temperature, i
 | `G_W_m2` | W/m2 | Plane-of-array irradiance channel |
 | `logger_time_s` | s | Original resetting logger counter |
 | `elapsed_s` | s | Reconstructed monotonic elapsed time |
+| `timestamp` | datetime | Recorded wall-clock time when present (2026-03-17 only) |
+| `wall_elapsed_s` | s | Elapsed wall-clock time when timestamp coverage is complete |
 | `valid_sensor_range` | bool | Temperature and irradiance plausibility flag |
 | `active_irradiance` | bool | `G_W_m2 >= 100` flag |
 
-`experimental_clean_v1_qc.json` and `experimental_clean_v1_qc.md` are committed as provenance metadata. The real raw and processed measurements remain excluded until release permission and a data licence are confirmed.
+The fifth-channel timebase is not assumed to be wall-clock time. On 2026-03-17, the wall-clock duration is 2.7326 times the reconstructed fifth-channel duration.
+
+## Electrical input and schema
+
+The electrical builder accepts one instrument Markdown export per day and optional XLSX originals for cross-checking. Its core output fields are ISO experiment date, source-row order, sequence, wall-clock timestamp, voltage, raw and scaled current, active power, calculated `V * I` power, consistency flags, duplicate-timestamp flags, and source SHA-256.
+
+The current header says `mA` on eight days although the numerical values satisfy `P ~= V * I` only when interpreted as amperes. The chosen scale and the header conflict are both retained; the header is never silently rewritten.
+
+`experimental_clean_v1_qc.*` and `electrical_clean_v1_qc.*` are committed as provenance metadata. The real raw and processed measurements remain excluded until release permission and a data licence are confirmed.

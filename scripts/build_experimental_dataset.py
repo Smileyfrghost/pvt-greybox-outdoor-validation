@@ -40,6 +40,14 @@ VALUE_RE = re.compile(
 TIMESTAMP_RE = re.compile(r"\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?)\]")
 
 
+def _iso_experiment_date(day: str, year: int = 2026) -> str:
+    match = re.fullmatch(r"(\d{1,2})\.(\d{1,2})", day)
+    if not match:
+        raise ValueError(f"Expected an M.D experiment label, got {day!r}")
+    month, day_of_month = (int(value) for value in match.groups())
+    return f"{year:04d}-{month:02d}-{day_of_month:02d}"
+
+
 def _decode_text(path: Path) -> str:
     raw = path.read_bytes()
     if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
@@ -100,11 +108,19 @@ def load_day(raw_dir: Path, day: str, filename: str, flow_ml_min: float) -> pd.D
     if frame.empty:
         raise ValueError(f"No numeric records parsed from {path}")
 
-    frame.insert(0, "date", day)
-    frame.insert(1, "flow_ml_min", flow_ml_min)
-    frame.insert(2, "flow_kg_s", flow_ml_min / 60_000.0)
-    frame.insert(3, "sample_order", np.arange(len(frame), dtype=int))
+    frame.insert(0, "experiment_date", _iso_experiment_date(day))
+    frame.insert(1, "date", day)
+    frame.insert(2, "flow_ml_min", flow_ml_min)
+    frame.insert(3, "flow_kg_s", flow_ml_min / 60_000.0)
+    frame.insert(4, "sample_order", np.arange(len(frame), dtype=int))
     frame["elapsed_s"] = _continuous_elapsed(frame["logger_time_s"])
+    if "timestamp" not in frame:
+        frame["timestamp"] = pd.NaT
+    frame["timestamp"] = pd.to_datetime(frame["timestamp"], errors="coerce")
+    if frame["timestamp"].notna().all():
+        frame["wall_elapsed_s"] = (frame["timestamp"] - frame["timestamp"].iloc[0]).dt.total_seconds()
+    else:
+        frame["wall_elapsed_s"] = np.nan
 
     temperatures = frame[["T_panel_C", "T_tank_C", "T_inlet_C"]]
     temperature_valid = temperatures.ge(-30.0).all(axis=1) & temperatures.le(90.0).all(axis=1)
@@ -119,16 +135,31 @@ def build_dataset(raw_dir: Path) -> tuple[pd.DataFrame, dict]:
     dataset = pd.concat(frames, ignore_index=True)
 
     qc_days = {}
-    for day, frame in dataset.groupby("date", sort=False):
+    for day, frame in dataset.groupby("experiment_date", sort=False):
         positive_dt = frame["elapsed_s"].diff()
         positive_dt = positive_dt[positive_dt > 0]
+        timestamp_coverage = float(frame["timestamp"].notna().mean())
+        wall_duration_h = (
+            float(frame["wall_elapsed_s"].iloc[-1]) / 3600.0 if timestamp_coverage == 1.0 else None
+        )
+        logger_duration_h = float(frame["elapsed_s"].iloc[-1]) / 3600.0
         qc_days[day] = {
             "flow_ml_min": float(frame["flow_ml_min"].iloc[0]),
             "rows": int(len(frame)),
             "invalid_sensor_rows": int((~frame["valid_sensor_range"]).sum()),
             "active_rows": int(frame["active_irradiance"].sum()),
             "exact_duplicate_rows": int(frame.duplicated(subset=["T_panel_C", "T_tank_C", "T_inlet_C", "G_W_m2", "logger_time_s"]).sum()),
-            "duration_h": round(float(frame["elapsed_s"].iloc[-1]) / 3600.0, 3),
+            "duration_h": round(logger_duration_h, 3),
+            "logger_counter_duration_h": round(logger_duration_h, 4),
+            "timestamp_coverage_fraction": timestamp_coverage,
+            "wall_clock_start": frame["timestamp"].iloc[0].isoformat() if timestamp_coverage == 1.0 else None,
+            "wall_clock_end": frame["timestamp"].iloc[-1].isoformat() if timestamp_coverage == 1.0 else None,
+            "wall_clock_duration_h": round(wall_duration_h, 4) if wall_duration_h is not None else None,
+            "wall_to_logger_duration_ratio": (
+                round(wall_duration_h / logger_duration_h, 4)
+                if wall_duration_h is not None and logger_duration_h > 0
+                else None
+            ),
             "median_step_s": round(float(positive_dt.median()), 3),
             "panel_temperature_range_C": [round(float(frame["T_panel_C"].min()), 2), round(float(frame["T_panel_C"].max()), 2)],
             "inlet_temperature_range_C": [round(float(frame["T_inlet_C"].min()), 2), round(float(frame["T_inlet_C"].max()), 2)],
@@ -146,6 +177,7 @@ def build_dataset(raw_dir: Path) -> tuple[pd.DataFrame, dict]:
             "No outlet-water temperature channel is present; thermal power and thermal efficiency cannot be measured directly.",
             "No ambient-air temperature channel is present in these logger files.",
             "Electrical measurements are stored separately and require timestamp-based alignment before use.",
+            "The fifth logger channel is retained as logger_time_s, but its wall-clock meaning is not established. On the timestamped 2026-03-17 record, wall-clock and reconstructed logger-counter durations differ materially.",
         ],
     }
     return dataset, qc

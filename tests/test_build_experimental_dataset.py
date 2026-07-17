@@ -31,8 +31,12 @@ class ExperimentalDatasetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             path = Path(temp_dir) / "sample.txt"
             path.write_text("28.8,21.0,19.3,691.4,10\n28.6,21.0,19.1,687.1,12\n", encoding="utf-8")
-            frame = load_day(Path(temp_dir), "test", "sample.txt", 300.0)
+            frame = load_day(Path(temp_dir), "3.20", "sample.txt", 300.0)
+            self.assertEqual(frame["experiment_date"].iloc[0], "2026-03-20")
+            self.assertEqual(frame["date"].iloc[0], "3.20")
             self.assertEqual(frame["flow_kg_s"].iloc[0], 0.005)
+            self.assertTrue(frame["timestamp"].isna().all())
+            self.assertTrue(frame["wall_elapsed_s"].isna().all())
             self.assertTrue(frame["valid_sensor_range"].all())
             self.assertTrue(frame["active_irradiance"].all())
 

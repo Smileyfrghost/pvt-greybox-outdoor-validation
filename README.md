@@ -10,25 +10,28 @@ Reproducible data-processing and baseline modeling code for a small water-cooled
 
 ## Status
 
-This is a scoped research companion repository, not a release of the earlier competition project. Version `0.1.0` contains the audited temperature/irradiance data pipeline, whole-day validation baselines, tests, and data-quality metadata. The original measurements are not redistributed yet because data ownership and licensing still need to be confirmed.
+This is a scoped research companion repository, not a release of the earlier competition project. It contains audited temperature/irradiance and electrical-power pipelines, whole-day validation baselines, an electro-thermal clock-alignment diagnostic, tests, and data-quality metadata. The original measurements are not redistributed yet because data ownership and licensing still need to be confirmed.
 
-The current experiment inventory comprises nine test days, 41,599 logger records, and two day-level flow settings (300 and 500 mL/min). Twenty-one sensor-range failures occur on one day and are flagged rather than silently removed.
+The current experiment inventory comprises nine test days, 41,599 thermal/irradiance logger records, 162,844 electrical records, and two day-level flow settings (300 and 500 mL/min). Twenty-one thermal sensor-range failures and four voltage-current-power consistency failures are flagged rather than silently removed.
 
 ## What this repository supports
 
 - Rebuilding the temperature/irradiance dataset from the original logger files.
 - Reconstructing a monotonic elapsed-time axis when the logger counter resets.
 - Preserving panel, tank, and inlet temperature channels without relabeling them.
+- Parsing active power, voltage, and current from all nine original instrument exports.
+- Inferring the current scale from the physical relation `P ~= V * I` while retaining header-unit conflicts in QC.
+- Ranking candidate electro-thermal offsets without presenting correlation-based alignment as a measured clock offset.
 - Comparing modest static and dynamic baselines using leave-one-day-out evaluation.
 - Recording limitations and quality-control decisions in machine-readable form.
 
-It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. Electrical records require a separate, audited alignment step and are not yet part of this release.
+It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. Only one thermal day contains wall-clock timestamps; the remaining electro-thermal offsets are diagnostic candidates, not confirmed synchronization.
 
 ## Repository layout
 
 ```text
-analysis/                 Whole-day baseline model evaluation
-scripts/                  Audited experiment-data builder
+analysis/                 Whole-day baselines and clock-alignment diagnostics
+scripts/                  Audited thermal and electrical data builders
 tests/                    Synthetic parser and model tests
 data/                     Schema and data-quality metadata
 docs/                     Reproduction guide and claim boundaries
@@ -52,6 +55,20 @@ python scripts/build_experimental_dataset.py \
   --output-dir data/processed
 ```
 
+To parse the electrical exports and diagnose clock alignment:
+
+```bash
+python scripts/build_electrical_dataset.py \
+  --power-dir data/raw/electrical \
+  --xlsx-dir data/raw/electrical_xlsx \
+  --output-dir data/processed
+
+python analysis/diagnose_electrothermal_alignment.py \
+  --thermal-csv data/processed/experimental_clean_v1.csv \
+  --electrical-csv data/processed/electrical_clean_v1.csv \
+  --output-dir results/alignment
+```
+
 To evaluate whole-day baselines:
 
 ```bash
@@ -65,7 +82,7 @@ See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the exact input filen
 ## Planned release path
 
 1. Confirm permission and choose a licence for the experiment data.
-2. Add the audited electrical-log parser and timestamp-alignment report.
+2. Recover external clock anchors for the non-timestamped thermal days or freeze a thermal-only paper scope.
 3. Replace baseline regressions with a physically interpretable grey-box state model.
 4. Freeze a tagged release and archive it with a DOI alongside the preprint.
 

@@ -1,0 +1,482 @@
+{
+  "source": "original electrical-parameter instrument Markdown exports",
+  "rows_total": 162844,
+  "rows_valid_for_model": 162840,
+  "days_parsed": 9,
+  "days": {
+    "2026-03-16": {
+      "source_file": "3.16功率.md",
+      "source_sha256": "7b867e060e114da8e6d50960bb2240f9b24e77675c62d86ee899631128724c98",
+      "experiment_date": "2026-03-16",
+      "rows": 15697,
+      "sequence_first_last": [
+        1,
+        15697
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 18,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-16T12:46:51",
+      "timestamp_end": "2026-03-16T17:08:51",
+      "duration_h": 4.3667,
+      "median_sampling_s": 1.0,
+      "duplicate_timestamp_extra_rows": 18,
+      "nonpositive_time_steps": 18,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "A",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 2.900652646843976e-05,
+        "0.001": 0.9989999709934736
+      },
+      "current_header_conflict": false,
+      "voltage_range_V": [
+        5.312,
+        21.602
+      ],
+      "current_range_A": [
+        0.0,
+        5.804
+      ],
+      "active_power_range_W": [
+        0.0,
+        95.20100000000001
+      ],
+      "zero_power_rows": 767,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 2.900652646843976e-05,
+      "vi_relative_error_p95": 0.001276951323371664,
+      "valid_for_model_rows": 15697
+    },
+    "2026-03-17": {
+      "source_file": "3.17功率.md",
+      "source_sha256": "7e62a22c0ba5a9547d3453543a97225062a651fa64708b43ac26b2e6d19b19cf",
+      "experiment_date": "2026-03-17",
+      "rows": 26561,
+      "sequence_first_last": [
+        1,
+        26561
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 8,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-17T09:39:24",
+      "timestamp_end": "2026-03-17T17:02:01",
+      "duration_h": 7.3769,
+      "median_sampling_s": 1.0,
+      "duplicate_timestamp_extra_rows": 8,
+      "nonpositive_time_steps": 8,
+      "gaps_over_2x_median": 1,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 3.4248309072367026e-05,
+        "0.001": 0.998999965751691
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        14.343,
+        21.387
+      ],
+      "current_range_A": [
+        0.0,
+        2.207
+      ],
+      "active_power_range_W": [
+        0.0,
+        32.782000000000004
+      ],
+      "zero_power_rows": 7,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 3.4248309072367026e-05,
+      "vi_relative_error_p95": 0.00014551594619543445,
+      "valid_for_model_rows": 26561
+    },
+    "2026-03-18": {
+      "source_file": "3.18功率.md",
+      "source_sha256": "f5588107cf231c6bf781b40a9ca6de1ab57c887d7f75ae041ef3ecb921ec186f",
+      "experiment_date": "2026-03-18",
+      "rows": 36710,
+      "sequence_first_last": [
+        1,
+        36710
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 90,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-18T07:43:45",
+      "timestamp_end": "2026-03-18T17:56:18",
+      "duration_h": 10.2092,
+      "median_sampling_s": 1.0,
+      "duplicate_timestamp_extra_rows": 90,
+      "nonpositive_time_steps": 90,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 8.930564858285789e-06,
+        "0.001": 0.9989999910694353
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        13.355,
+        22.073
+      ],
+      "current_range_A": [
+        0.0,
+        5.628
+      ],
+      "active_power_range_W": [
+        0.0,
+        96.563
+      ],
+      "zero_power_rows": 30,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 8.930564858285789e-06,
+      "vi_relative_error_p95": 0.0001907083201840489,
+      "valid_for_model_rows": 36710
+    },
+    "2026-03-19": {
+      "source_file": "3.19功率.md",
+      "source_sha256": "23612d02a47c1804582b1aed3828fa19cc71c3a8cbf08226ebec02eb249ca8bd",
+      "experiment_date": "2026-03-19",
+      "rows": 32017,
+      "sequence_first_last": [
+        1,
+        32017
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 78,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-19T08:03:55",
+      "timestamp_end": "2026-03-19T16:58:13",
+      "duration_h": 8.905,
+      "median_sampling_s": 1.0,
+      "duplicate_timestamp_extra_rows": 78,
+      "nonpositive_time_steps": 78,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 2.973375823566428e-05,
+        "0.001": 0.9989999702662418
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        13.406,
+        22.085
+      ],
+      "current_range_A": [
+        0.0,
+        6.1160000000000005
+      ],
+      "active_power_range_W": [
+        0.0,
+        101.302
+      ],
+      "zero_power_rows": 209,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 2.973375823566428e-05,
+      "vi_relative_error_p95": 0.0015544815492075223,
+      "valid_for_model_rows": 32017
+    },
+    "2026-03-20": {
+      "source_file": "3.20功率.md",
+      "source_sha256": "2f7e0a0103727d64a25c4048e9567818daaffcf4b26f61a0c4be1f99f8ff644c",
+      "experiment_date": "2026-03-20",
+      "rows": 31993,
+      "sequence_first_last": [
+        1,
+        31993
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 90,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-20T08:14:31",
+      "timestamp_end": "2026-03-20T17:08:24",
+      "duration_h": 8.8981,
+      "median_sampling_s": 1.0,
+      "duplicate_timestamp_extra_rows": 90,
+      "nonpositive_time_steps": 90,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 4.029387606088303e-05,
+        "0.001": 0.9989999597061239
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        13.168000000000001,
+        16.409
+      ],
+      "current_range_A": [
+        0.33,
+        6.048
+      ],
+      "active_power_range_W": [
+        4.345,
+        98.21600000000001
+      ],
+      "zero_power_rows": 0,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 4.029387606088303e-05,
+      "vi_relative_error_p95": 0.0015166146978598384,
+      "valid_for_model_rows": 31993
+    },
+    "2026-03-21": {
+      "source_file": "3.21功率.md",
+      "source_sha256": "3c3b34537f17b007f470b7680e2a511cad40d100bf275259d108ff5c12c8d380",
+      "experiment_date": "2026-03-21",
+      "rows": 4544,
+      "sequence_first_last": [
+        1,
+        4544
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 0,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-21T08:36:09",
+      "timestamp_end": "2026-03-21T16:10:33",
+      "duration_h": 7.5733,
+      "median_sampling_s": 6.0,
+      "duplicate_timestamp_extra_rows": 0,
+      "nonpositive_time_steps": 0,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 1.619112143452046e-05,
+        "0.001": 0.9989999838088786
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        12.969,
+        15.909
+      ],
+      "current_range_A": [
+        0.636,
+        5.7940000000000005
+      ],
+      "active_power_range_W": [
+        8.248,
+        92.014
+      ],
+      "zero_power_rows": 0,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 1.619112143452046e-05,
+      "vi_relative_error_p95": 0.0015050837714518216,
+      "valid_for_model_rows": 4544
+    },
+    "2026-03-22": {
+      "source_file": "3.22功率.md",
+      "source_sha256": "f9c88c5ef47c1f1cfdf4048bb523880f5dfb3f4a446850b509b3f8339f2c289f",
+      "experiment_date": "2026-03-22",
+      "rows": 5001,
+      "sequence_first_last": [
+        1,
+        5001
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 33,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-22T09:04:34",
+      "timestamp_end": "2026-03-22T17:29:53",
+      "duration_h": 8.4219,
+      "median_sampling_s": 6.0,
+      "duplicate_timestamp_extra_rows": 33,
+      "nonpositive_time_steps": 33,
+      "gaps_over_2x_median": 2,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 0.0003985770025247339,
+        "0.001": 0.9989996014229976
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        0.0,
+        20.984
+      ],
+      "current_range_A": [
+        0.0,
+        6.097
+      ],
+      "active_power_range_W": [
+        0.0,
+        93.05
+      ],
+      "zero_power_rows": 1634,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 4,
+      "vi_relative_error_median": 0.0003985770025247339,
+      "vi_relative_error_p95": 0.0015560429424082878,
+      "valid_for_model_rows": 4997
+    },
+    "2026-03-25": {
+      "source_file": "3.25功率.md",
+      "source_sha256": "ba9485580274c5e69205e3fdeff57b7b35fb9664efdcd551742f0d10a5659cf9",
+      "experiment_date": "2026-03-25",
+      "rows": 5122,
+      "sequence_first_last": [
+        1,
+        5122
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 0,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-25T08:08:49",
+      "timestamp_end": "2026-03-25T16:40:59",
+      "duration_h": 8.5361,
+      "median_sampling_s": 6.0,
+      "duplicate_timestamp_extra_rows": 0,
+      "nonpositive_time_steps": 0,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 9.258200937292013e-06,
+        "0.001": 0.998999990741799
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        0.0,
+        16.432
+      ],
+      "current_range_A": [
+        0.0,
+        5.242
+      ],
+      "active_power_range_W": [
+        0.0,
+        85.626
+      ],
+      "zero_power_rows": 105,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 9.242236024930276e-06,
+      "vi_relative_error_p95": 0.0009673847392793298,
+      "valid_for_model_rows": 5122
+    },
+    "2026-03-26": {
+      "source_file": "3.26功率.md",
+      "source_sha256": "ed3eda244ec012cc2845f742dccb3848ac2a6161a092fc083d57f3b1e172b0d7",
+      "experiment_date": "2026-03-26",
+      "rows": 5199,
+      "sequence_first_last": [
+        1,
+        5199
+      ],
+      "sequence_gaps": 0,
+      "raw_order_negative_time_steps": 0,
+      "raw_order_duplicate_time_steps": 0,
+      "raw_order_is_monotonic": true,
+      "timestamp_start": "2026-03-26T08:41:02",
+      "timestamp_end": "2026-03-26T17:20:55",
+      "duration_h": 8.6647,
+      "median_sampling_s": 6.0,
+      "duplicate_timestamp_extra_rows": 0,
+      "nonpositive_time_steps": 0,
+      "gaps_over_2x_median": 0,
+      "current_header_unit": "mA",
+      "current_scale_to_A": 1.0,
+      "current_scale_candidate_median_errors": {
+        "1.0": 8.963210702524618e-06,
+        "0.001": 0.9989999910367893
+      },
+      "current_header_conflict": true,
+      "voltage_range_V": [
+        13.162,
+        16.142
+      ],
+      "current_range_A": [
+        0.535,
+        4.955
+      ],
+      "active_power_range_W": [
+        7.041,
+        79.049
+      ],
+      "zero_power_rows": 0,
+      "invalid_electrical_range_rows": 0,
+      "vi_inconsistent_rows": 0,
+      "vi_relative_error_median": 8.963210702524618e-06,
+      "vi_relative_error_p95": 3.1995878884957244e-05,
+      "valid_for_model_rows": 5199
+    }
+  },
+  "known_limitations": [
+    "The current header is inconsistent with the numeric scale on some days; scale is inferred from P ~= V*I and the conflict is retained in QC.",
+    "Duplicate wall-clock timestamps are preserved and flagged rather than silently removed.",
+    "The instrument's constant environment-temperature field is metadata, not a measured outdoor ambient-temperature series.",
+    "Electrical timestamps cannot be aligned to relative-time thermal logs without an explicit or auditable offset procedure."
+  ],
+  "xlsx_crosscheck": {
+    "2026-03-21": {
+      "xlsx_file": "3.21功率.xlsx",
+      "matched_markdown": true,
+      "rows_xlsx": 4544,
+      "rows_markdown": 4544,
+      "row_count_equal": true,
+      "timestamps_equal": true,
+      "max_absolute_numeric_difference": {
+        "voltage_V": 0.0,
+        "current_raw": 0.0,
+        "active_power_W": 0.0
+      }
+    },
+    "2026-03-22": {
+      "xlsx_file": "3.22功率.xlsx",
+      "matched_markdown": true,
+      "rows_xlsx": 5001,
+      "rows_markdown": 5001,
+      "row_count_equal": true,
+      "timestamps_equal": true,
+      "max_absolute_numeric_difference": {
+        "voltage_V": 0.0,
+        "current_raw": 0.0,
+        "active_power_W": 0.0
+      }
+    },
+    "2026-03-25": {
+      "xlsx_file": "3.25功率.xlsx",
+      "matched_markdown": true,
+      "rows_xlsx": 5122,
+      "rows_markdown": 5122,
+      "row_count_equal": true,
+      "timestamps_equal": true,
+      "max_absolute_numeric_difference": {
+        "voltage_V": 0.0,
+        "current_raw": 0.0,
+        "active_power_W": 0.0
+      }
+    },
+    "2026-03-26": {
+      "xlsx_file": "3.26功率.xlsx",
+      "matched_markdown": true,
+      "rows_xlsx": 5199,
+      "rows_markdown": 5199,
+      "row_count_equal": true,
+      "timestamps_equal": true,
+      "max_absolute_numeric_difference": {
+        "voltage_V": 0.0,
+        "current_raw": 0.0,
+        "active_power_W": 0.0
+      }
+    }
+  }
+}
