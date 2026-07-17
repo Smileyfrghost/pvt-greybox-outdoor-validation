@@ -1,53 +1,71 @@
-# Phase 1 data audit and paper decision gate
+# Phase 1 data audit and operational alignment
 
-Audit date: 2026-07-17.
+Audit date: 2026-07-17. Alignment revision: 2026-07-17 after author confirmation of the acquisition sequence.
 
 ## Outcome
 
-The electrical and thermal records can each be reconstructed reproducibly, but a nine-day pointwise electro-thermal dataset cannot yet be claimed. The limiting evidence is the thermal clock, not the electrical parser.
+The nine thermal/irradiance and electrical records can be reconstructed on a common operational clock. The earlier diagnostic that used the fifth thermal channel as elapsed wall time was rejected: on the timestamped reference day, that channel accumulates 1.6255 h while recorded wall time spans 4.4418 h.
+
+The corrected clock uses the following evidence chain:
+
+1. The complete 2026-03-17 timestamps establish a normal thermal sampling period of 5.834 s (5th--95th percentile: 5.823--5.846 s), with one 307.392 s acquisition gap.
+2. The author confirmed that electrical logging was generally started first, thermal/irradiance logging later, and the two were stopped together or in close succession.
+3. The non-timestamped thermal files are therefore reconstructed at 5.834 s per sample and anchored at the final electrical timestamp. Recorded timestamps are retained unchanged on 2026-03-17.
+4. Where source file modification times are reliable, they independently lie within approximately six minutes of electrical stop and support the common-stop rule. Modification time is corroboration, not the primary clock.
+5. Residual timing uncertainty is tested at +/-30, +/-60, and +/-120 s.
 
 | Evidence block | Audited result | Manuscript status |
 |---|---|---|
 | Thermal/irradiance logger | 41,599 rows across nine days; 41,578 pass range checks; 21 failures on 2026-03-22 | usable with flags |
 | Electrical instrument | 162,844 rows across nine days; 162,840 pass range and `P ~= V * I` checks; four failures on 2026-03-22 | usable with flags |
 | Electrical originals | Four available XLSX files exactly match the corresponding Markdown exports | Markdown accepted as the nine-day parsing interface |
-| Electrical sampling | Median interval is 1 s on 2026-03-16 through 2026-03-20 and 6 s on later days; 317 extra duplicate-timestamp rows are preserved | usable after aggregation policy is stated |
-| Current unit | Eight headers say `mA`, but numerical consistency requires a scale of 1 A per recorded unit | inferred unit is defensible; conflict must be disclosed |
-| Thermal wall clock | Only 2026-03-17 has complete recorded timestamps | insufficient for nine-day synchronization |
-| Fifth thermal channel | On 2026-03-17, wall-clock duration is 4.4418 h and reconstructed fifth-channel duration is 1.6255 h (ratio 2.7326) | cannot be treated as wall-clock time without further evidence |
+| Electrical sampling | Median interval is 1 s on 2026-03-16 through 2026-03-20 and 6 s on later days; 317 extra duplicate timestamps are preserved | usable after 30 s aggregation |
+| Current unit | Eight headers say `mA`, but numerical consistency requires a scale of 1 A per recorded unit | inferred unit is defensible; conflict disclosed |
+| Thermal clock | One timestamped reference day plus fixed-period/common-stop reconstruction on eight days | usable with shift sensitivity |
+| PV module | YTXN-6M-120W, monocrystalline, 120 W, 18 V/6.67 A at maximum power, 21.4 V open circuit, 6.80 A short circuit, 0.648 m2 | nameplate supported |
 
-The four electrically invalid rows are retained in the processed file and excluded only by `valid_for_model`. No row is silently deleted. Original electrical record order is monotonic on all nine days; duplicate timestamps originate in the source files rather than a sorting artifact.
+The four electrically invalid rows are retained and excluded only by `valid_for_model`. No row is silently deleted. Original electrical record order is monotonic on all nine days.
 
-## Alignment diagnostic
+## Alignment results
 
-For non-timestamped days, the diagnostic scans 30 s candidate starts that place the complete relative thermal record inside the electrical window. It scores each candidate using 75% irradiance-power rank correlation and 25% smoothed first-difference agreement. This is a candidate-ranking device, not clock measurement.
+At the reconstructed operational clock, irradiance--power rank correlation is 0.89--0.98 on eight days and 0.61 on 2026-03-22. The reconstructed thermal duration differs from the complete electrical duration by only 2.1--3.3 min on 2026-03-18, 03-19, 03-20, 03-25, and 03-26. Larger differences on 03-16, 03-21, and 03-22 indicate that electrical logging began 21, 44, and 75 min earlier, respectively.
 
-The current result is one day with recorded wall-clock timestamps, three moderate but unconfirmed candidates (2026-03-16, 2026-03-21, and 2026-03-25), and five ambiguous days. The 2026-03-17 direct timestamp alignment has a diagnostic score of 0.687, but its relative logger counter follows a materially different timebase. File modification times are close to electrical stop times on several later days, yet their implied starts differ from correlation-ranked starts by roughly 68--241 min. Modification time is therefore retained only as secondary forensic evidence.
+The 2026-03-22 electrical trace remains a special operating-state problem: power is zero for roughly the first 1.8 h despite substantial irradiance. This interval must be treated as load/logger-off behavior rather than a clock failure and excluded or modeled as a separate state.
 
-No aligned training table is emitted by the diagnostic. This is deliberate: generating one would turn an unverified correlation peak into false measurement precision.
+The diagnostic now emits two local, Git-ignored tables:
 
-## What B610 contributes
+- `thermal_clock_reconstruction_v1.csv`: every thermal record with its recorded or reconstructed timestamp and alignment basis.
+- `electrothermal_aligned_30s_v1.csv`: valid thermal and electrical channels aggregated on common 30 s bins.
 
-The B610 document is a system description and claimed-results document, not a raw acquisition log or an instrument timing manual. Its platform diagram shows an intended irradiance meter, flowmeter, electrical parameter tester, inlet/outlet temperature sensing, pump, and load. The files currently in hand contain panel, tank, inlet and irradiance channels; day-level flow labels; and separate electrical measurements. They do not contain measured outlet temperature, time-resolved flow, ambient temperature, wind, or control commands.
+Correlation-ranked candidates remain diagnostic. Recorded timestamps or the author-confirmed common-stop rule define the operational clock; correlation is not allowed to overwrite those anchors merely to improve a score.
 
-Accordingly, B610 is usable for apparatus context and for locating missing records. Its stated outlet-temperature, thermal-efficiency, HIL, and control-performance results are not imported into the paper evidence chain unless their underlying files are found and audited.
+## Hardware evidence
 
-## Evidence needed from the experiment record
+The module nameplate photograph confirms model YTXN-6M-120W and dimensions 1200 x 540 x 30 mm. The resulting area is 0.648 m2 and the nameplate efficiency is approximately 18.5% at 1000 W/m2. The central model already used the correct area and 120 W rating. A legacy `packing_factor=1.10` was physically impossible and has been corrected to 1.00 because module area and nameplate efficiency are already represented explicitly.
 
-The highest-value recovery items are:
+B610 remains a system-description document rather than a raw acquisition log. Its outlet-temperature, thermal-efficiency, HIL, and controller-performance statements are not imported unless their underlying files are recovered and audited.
 
-1. Original timestamped serial-monitor exports for the eight non-timestamped thermal days.
-2. Written start and stop times for both thermal and electrical logging, preferably with minute-level or better precision.
-3. The code or instrument setting defining the fifth thermal channel and its reset behavior.
-4. Photographs, notebook pages, messages, or screen captures that independently anchor logger start/stop events.
-5. Any original outlet-temperature, flowmeter, pump-command, ambient-temperature, or wind files referenced by B610.
+## Remaining evidence priorities
 
-## Scope decision gate
+No new physical experiment is required for the base paper. The most valuable recoverable materials are now:
 
-Freeze the primary manuscript scope no later than 2026-08-03.
+1. Temperature-sensor models, stated accuracy, and photographs or sketches of panel/tank/inlet probe placement.
+2. Irradiance-meter model, accuracy, and evidence that its sensing plane was coplanar with the PV module.
+3. Flowmeter or setting-device model and how 300 and 500 mL/min were established and checked.
+4. Electrical load/charger/controller wiring and whether load or MPPT state changed during a day, especially on 2026-03-16 and 03-22.
+5. Pump label/manual, rated voltage/current/power, maximum flow/head, and whether it ran continuously.
+6. Tank volume, water charge, insulation/mixing arrangement, tube dimensions, and loop layout.
+7. Experiment location, module tilt and azimuth, and confirmation of any setup change between dates.
+8. The logger code defining the fifth thermal channel; useful for documentation, but no longer required to build the operational wall clock.
 
-- Continue with the nine-day electro-thermal grey-box paper only if both 500 mL/min days and at least five 300 mL/min days obtain auditable wall-clock mappings, the fifth-channel timebase is explained or replaced, and alignment sensitivity at +/-30, +/-60, and +/-120 s does not overturn the main validation result.
-- If that gate is not met, freeze a thermal-response paper based on the nine audited temperature/irradiance days. Electrical data may appear as a separately described measurement stream or a timestamped single-day case, but not as falsely synchronized pointwise targets.
-- Do not spend August tuning a dynamic model on the current `elapsed_s` field until the timebase decision is resolved. Static day-level exploration is acceptable; confirmatory dynamic metrics are not.
+If an item cannot be recovered, record it as unavailable rather than infer a precise specification.
 
-This gate favors a smaller defensible preprint over a broader paper whose central electro-thermal dataset cannot be reproduced.
+## Scope decision
+
+The synchronization gate is passed for proceeding to whole-day electrothermal model development, subject to day-level and +/-30/60/120 s timing sensitivity. The next model stage must:
+
+- retain complete-day holdouts;
+- report 2026-03-22 both with and without the load-off interval;
+- treat 300 and 500 mL/min as day-level settings rather than measured time series;
+- avoid thermal-power or thermal-efficiency claims because outlet temperature is absent; and
+- use the nameplate rating without an additional packing multiplier.

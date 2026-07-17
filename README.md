@@ -21,11 +21,12 @@ The current experiment inventory comprises nine test days, 41,599 thermal/irradi
 - Preserving panel, tank, and inlet temperature channels without relabeling them.
 - Parsing active power, voltage, and current from all nine original instrument exports.
 - Inferring the current scale from the physical relation `P ~= V * I` while retaining header-unit conflicts in QC.
-- Ranking candidate electro-thermal offsets without presenting correlation-based alignment as a measured clock offset.
+- Reconstructing non-timestamped thermal clocks from the 5.834 s timestamped reference period and the author-confirmed common-stop acquisition sequence.
+- Reporting correlation-ranked alternatives and +/-30/60/120 s timing sensitivity without allowing correlation to overwrite physical clock anchors.
 - Comparing modest static and dynamic baselines using leave-one-day-out evaluation.
 - Recording limitations and quality-control decisions in machine-readable form.
 
-It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. Only one thermal day contains wall-clock timestamps; the remaining electro-thermal offsets are diagnostic candidates, not confirmed synchronization.
+It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. One thermal day contains wall-clock timestamps; the remaining clocks are operational reconstructions based on its stable sampling period and the confirmed acquisition sequence, and must retain timing-sensitivity analysis.
 
 ## Repository layout
 
@@ -82,7 +83,7 @@ See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the exact input filen
 ## Planned release path
 
 1. Confirm permission and choose a licence for the experiment data.
-2. Recover external clock anchors for the non-timestamped thermal days or freeze a thermal-only paper scope.
+2. Lock the operational clock reconstruction and timing-sensitivity protocol.
 3. Replace baseline regressions with a physically interpretable grey-box state model.
 4. Freeze a tagged release and archive it with a DOI alongside the preprint.
 

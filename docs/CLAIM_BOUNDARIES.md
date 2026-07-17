@@ -8,6 +8,8 @@
 - Whole-day holdout baselines can be evaluated using code in this repository.
 - Nine electrical exports can be parsed with explicit unit and voltage-current-power checks.
 - Four available XLSX exports exactly match their Markdown counterparts for timestamps, voltage, current, and active power.
+- The timestamped 2026-03-17 thermal record establishes a normal 5.834 s sample period; author-confirmed common-stop acquisition supports an operational clock reconstruction on the other eight days.
+- A 30 s aligned electrothermal table can be regenerated with explicit alignment basis and timing sensitivity.
 
 ## Not supported by the current measurements
 
@@ -20,4 +22,4 @@
 
 ## Pending work
 
-Electrical parsing and quality control are complete. Pointwise electro-thermal claims remain pending because only the 2026-03-17 thermal file contains wall-clock timestamps. Correlation-ranked offsets on the other days are exploratory candidates. External start/end anchors or original timestamped serial logs are required before those days enter confirmatory electro-thermal modeling.
+Electrical parsing, quality control, and operational clock reconstruction are complete. Confirmatory electrothermal modeling remains pending whole-day validation, +/-30/60/120 s timing sensitivity, and explicit treatment of load-off intervals such as early 2026-03-22. Correlation-ranked offsets are diagnostic and do not replace recorded or acquisition-process anchors.

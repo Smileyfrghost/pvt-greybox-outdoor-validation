@@ -40,6 +40,8 @@ The five logger values are interpreted as panel temperature, tank temperature, i
 
 The fifth-channel timebase is not assumed to be wall-clock time. On 2026-03-17, the wall-clock duration is 2.7326 times the reconstructed fifth-channel duration.
 
+The alignment diagnostic instead calibrates a 5.834 s normal sample period from the recorded 2026-03-17 timestamps. It preserves that day's timestamps and reconstructs the other days by sample order plus an author-confirmed common-stop anchor. Generated tables retain `alignment_basis` and `reference_sample_period_s`; residual shifts of +/-30, +/-60, and +/-120 s are evaluated explicitly.
+
 ## Electrical input and schema
 
 The electrical builder accepts one instrument Markdown export per day and optional XLSX originals for cross-checking. Its core output fields are ISO experiment date, source-row order, sequence, wall-clock timestamp, voltage, raw and scaled current, active power, calculated `V * I` power, consistency flags, duplicate-timestamp flags, and source SHA-256.

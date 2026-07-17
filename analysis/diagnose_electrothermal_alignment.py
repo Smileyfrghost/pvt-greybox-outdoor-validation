@@ -35,6 +35,18 @@ THERMAL_FILENAMES = {
 }
 
 
+def _json_safe(value):
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_safe(item) for item in value]
+    if isinstance(value, (np.floating, float)):
+        return float(value) if np.isfinite(value) else None
+    if isinstance(value, np.integer):
+        return int(value)
+    return value
+
+
 def _rank_correlation(x: np.ndarray, y: np.ndarray) -> float:
     valid = np.isfinite(x) & np.isfinite(y)
     if valid.sum() < 20:
@@ -72,9 +84,47 @@ def _alignment_score(irradiance: np.ndarray, power: np.ndarray) -> tuple[float, 
     return float(score), rank_corr, event_corr, n_pairs
 
 
-def _relative_thermal_bins(frame: pd.DataFrame, bin_seconds: int) -> pd.Series:
-    work = frame.loc[frame["valid_sensor_range"].astype(bool), ["elapsed_s", "G_W_m2"]].copy()
-    work["bin"] = np.floor(work["elapsed_s"] / bin_seconds).astype(int)
+def estimate_reference_sample_period(thermal: pd.DataFrame) -> dict:
+    """Estimate the normal thermal sampling period from the timestamped reference day."""
+    timestamps = pd.to_datetime(thermal.get("timestamp"), errors="coerce")
+    dated = thermal.assign(_timestamp=timestamps).dropna(subset=["_timestamp"])
+    if dated.empty:
+        raise ValueError("No timestamped thermal reference day is available")
+    coverage = dated.groupby("experiment_date")["_timestamp"].count() / thermal.groupby("experiment_date").size()
+    reference_dates = coverage[coverage >= 0.95].index.tolist()
+    if not reference_dates:
+        raise ValueError("No thermal day has at least 95% timestamp coverage")
+    reference = dated[dated["experiment_date"] == reference_dates[0]].sort_values("sample_order")
+    deltas = reference["_timestamp"].diff().dt.total_seconds().dropna()
+    normal = deltas[(deltas > 0) & (deltas < 60)]
+    if len(normal) < 20:
+        raise ValueError("Too few normal timestamp intervals to estimate the sample period")
+    return {
+        "reference_date": str(reference_dates[0]),
+        "sample_period_s": float(normal.median()),
+        "p05_s": float(normal.quantile(0.05)),
+        "p95_s": float(normal.quantile(0.95)),
+        "normal_intervals": int(len(normal)),
+        "long_gap_count": int((deltas >= 60).sum()),
+        "maximum_gap_s": float(deltas.max()),
+    }
+
+
+def _relative_seconds(frame: pd.DataFrame, sample_period_s: float) -> pd.Series:
+    wall_elapsed = (
+        pd.to_numeric(frame["wall_elapsed_s"], errors="coerce")
+        if "wall_elapsed_s" in frame
+        else pd.Series(np.nan, index=frame.index)
+    )
+    if wall_elapsed.notna().mean() >= 0.95:
+        return wall_elapsed
+    return pd.to_numeric(frame["sample_order"], errors="raise") * sample_period_s
+
+
+def _relative_thermal_bins(frame: pd.DataFrame, bin_seconds: int, sample_period_s: float) -> pd.Series:
+    work = frame.loc[frame["valid_sensor_range"].astype(bool), ["sample_order", "G_W_m2"]].copy()
+    work["relative_s"] = _relative_seconds(frame, sample_period_s).loc[work.index]
+    work["bin"] = np.floor(work["relative_s"] / bin_seconds).astype(int)
     series = work.groupby("bin")["G_W_m2"].median()
     complete = series.reindex(range(int(series.index.max()) + 1))
     return complete.interpolate(limit=2, limit_direction="both")
@@ -92,10 +142,13 @@ def _electrical_bins(frame: pd.DataFrame, bin_seconds: int) -> pd.Series:
 
 
 def scan_candidate_offsets(
-    thermal: pd.DataFrame, electrical: pd.DataFrame, bin_seconds: int = 30
+    thermal: pd.DataFrame,
+    electrical: pd.DataFrame,
+    bin_seconds: int = 30,
+    sample_period_s: float = 5.834,
 ) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """Scan start offsets that keep the full relative thermal record in the power log."""
-    thermal_bins = _relative_thermal_bins(thermal, bin_seconds)
+    thermal_bins = _relative_thermal_bins(thermal, bin_seconds, sample_period_s)
     power_bins = _electrical_bins(electrical, bin_seconds)
     max_offset = len(power_bins) - len(thermal_bins)
     if max_offset < 0:
@@ -144,6 +197,76 @@ def _direct_timestamp_score(
         "paired_bins": n_pairs,
         "timestamp_coverage_fraction": float(timestamps.notna().mean()),
     }
+
+
+def reconstruct_thermal_timestamps(
+    thermal: pd.DataFrame,
+    electrical: pd.DataFrame,
+    sample_period_s: float,
+) -> tuple[pd.Series, str]:
+    """Use recorded timestamps when present; otherwise anchor the fixed-rate log at power stop."""
+    recorded = pd.to_datetime(thermal.get("timestamp"), errors="coerce")
+    if recorded.notna().mean() >= 0.95:
+        return recorded, "recorded_wall_clock"
+    electrical_end = pd.to_datetime(electrical["timestamp"]).max()
+    relative = _relative_seconds(thermal, sample_period_s)
+    aligned_start = electrical_end - pd.Timedelta(seconds=float(relative.max()))
+    return aligned_start + pd.to_timedelta(relative, unit="s"), "author_confirmed_common_stop_fixed_period"
+
+
+def _score_at_timestamps(
+    thermal: pd.DataFrame,
+    electrical: pd.DataFrame,
+    aligned_timestamps: pd.Series,
+    bin_seconds: int,
+) -> tuple[dict, pd.DataFrame]:
+    thermal_valid = thermal["valid_sensor_range"].astype(bool) & aligned_timestamps.notna()
+    thermal_work = thermal.loc[
+        thermal_valid, ["T_panel_C", "T_tank_C", "T_inlet_C", "G_W_m2"]
+    ].copy()
+    thermal_work.index = pd.DatetimeIndex(aligned_timestamps[thermal_valid])
+    thermal_bins = thermal_work.resample(f"{bin_seconds}s").median()
+
+    electrical_valid = electrical["valid_for_model"].astype(bool)
+    electrical_work = electrical.loc[
+        electrical_valid, ["timestamp", "voltage_V", "current_A", "active_power_W"]
+    ].copy()
+    electrical_work["timestamp"] = pd.to_datetime(electrical_work["timestamp"])
+    electrical_bins = electrical_work.set_index("timestamp").resample(f"{bin_seconds}s").median()
+
+    paired = thermal_bins.join(electrical_bins, how="inner").dropna(subset=["G_W_m2", "active_power_W"])
+    score, rank_corr, event_corr, n_pairs = _alignment_score(
+        paired["G_W_m2"].to_numpy(dtype=float), paired["active_power_W"].to_numpy(dtype=float)
+    )
+    summary = {
+        "start": aligned_timestamps.min().isoformat(),
+        "end": aligned_timestamps.max().isoformat(),
+        "overlap_start": paired.index.min().isoformat() if len(paired) else None,
+        "overlap_end": paired.index.max().isoformat() if len(paired) else None,
+        "paired_bins": n_pairs,
+        "score": score,
+        "rank_correlation": rank_corr,
+        "event_correlation": event_corr,
+    }
+    return summary, paired
+
+
+def _alignment_sensitivity(
+    thermal: pd.DataFrame,
+    electrical: pd.DataFrame,
+    aligned_timestamps: pd.Series,
+    bin_seconds: int,
+) -> list[dict]:
+    rows = []
+    for shift_s in (-120, -60, -30, 0, 30, 60, 120):
+        summary, _ = _score_at_timestamps(
+            thermal,
+            electrical,
+            aligned_timestamps + pd.Timedelta(seconds=shift_s),
+            bin_seconds,
+        )
+        rows.append({"shift_s": shift_s, "score": summary["score"], "paired_bins": summary["paired_bins"]})
+    return rows
 
 
 def _separated_top_candidates(scan: pd.DataFrame, bin_seconds: int, count: int = 5) -> pd.DataFrame:
@@ -212,9 +335,14 @@ def _plot_scan_grid(scans: dict[str, pd.DataFrame], summaries: dict, output_path
         ax.plot(scan["candidate_start"], scan["score"], color="#0072B2", linewidth=1.2)
         best_start = pd.Timestamp(summaries[date]["candidate_assessment"]["best_start"])
         ax.axvline(best_start, color="#D55E00", linewidth=1.0, label="best candidate")
-        direct = summaries[date].get("direct_timestamp_alignment")
-        if direct:
-            ax.axvline(pd.Timestamp(direct["start"]), color="#009E73", linestyle="--", linewidth=1.0, label="recorded timestamp")
+        operational = summaries[date]["operational_alignment"]
+        ax.axvline(
+            pd.Timestamp(operational["start"]),
+            color="#009E73",
+            linestyle="--",
+            linewidth=1.0,
+            label="operational alignment",
+        )
         forensic = summaries[date].get("forensic_file_time")
         if forensic:
             ax.axvline(pd.Timestamp(forensic["start_if_mtime_were_end"]), color="0.4", linestyle=":", linewidth=0.9, label="mtime-derived")
@@ -229,17 +357,15 @@ def _plot_scan_grid(scans: dict[str, pd.DataFrame], summaries: dict, output_path
     by_label = dict(zip(labels, handles))
     if by_label:
         fig.legend(by_label.values(), by_label.keys(), loc="outside lower center", ncol=3, fontsize=8)
-    fig.suptitle("Electro-thermal alignment scan (diagnostic candidates, not confirmed clock offsets)", fontsize=11)
+    fig.suptitle("Electro-thermal alignment scan with recorded/end-anchored operational clocks", fontsize=11)
     fig.savefig(output_path, dpi=300, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
 
 def _plot_candidate_overlays(
-    thermal_by_date: dict[str, pd.DataFrame],
-    electrical_by_date: dict[str, pd.DataFrame],
+    paired_by_date: dict[str, pd.DataFrame],
     summaries: dict,
     output_path: Path,
-    bin_seconds: int,
 ) -> None:
     import matplotlib
 
@@ -247,24 +373,17 @@ def _plot_candidate_overlays(
     import matplotlib.pyplot as plt
 
     fig, axes = plt.subplots(3, 3, figsize=(12, 8.5), constrained_layout=True, sharey=True)
-    for ax, date in zip(axes.flat, sorted(thermal_by_date)):
-        thermal = thermal_by_date[date]
-        electrical = electrical_by_date[date]
-        direct = summaries[date].get("direct_timestamp_alignment")
-        start = pd.Timestamp(direct["start"] if direct else summaries[date]["candidate_assessment"]["best_start"])
-        g = _relative_thermal_bins(thermal, bin_seconds)
-        p = _electrical_bins(electrical, bin_seconds)
-        g_index = start + pd.to_timedelta(g.index.to_numpy() * bin_seconds, unit="s")
-        g_values = g.to_numpy(dtype=float)
-        p_window = p[(p.index >= g_index.min()) & (p.index <= g_index.max())]
+    for ax, date in zip(axes.flat, sorted(paired_by_date)):
+        paired = paired_by_date[date]
+        g_values = paired["G_W_m2"].to_numpy(dtype=float)
+        p_values = paired["active_power_W"].to_numpy(dtype=float)
         g_scale = np.nanpercentile(g_values, 95) or 1.0
-        p_scale = np.nanpercentile(p_window.to_numpy(dtype=float), 95) if len(p_window) else 1.0
-        p_scale = p_scale or 1.0
-        origin = min(g_index.min(), p_window.index.min() if len(p_window) else g_index.min())
-        ax.plot((g_index - origin).total_seconds() / 3600, g_values / g_scale, color="#E69F00", label="irradiance")
-        if len(p_window):
-            ax.plot((p_window.index - origin).total_seconds() / 3600, p_window / p_scale, color="#0072B2", label="power")
-        source = "recorded timestamps" if direct else "best diagnostic candidate"
+        p_scale = np.nanpercentile(p_values, 95) or 1.0
+        origin = paired.index.min()
+        hours = (paired.index - origin).total_seconds() / 3600
+        ax.plot(hours, g_values / g_scale, color="#E69F00", label="irradiance")
+        ax.plot(hours, p_values / p_scale, color="#0072B2", label="power")
+        source = summaries[date]["alignment_basis"].replace("_", " ")
         ax.set_title(f"{date} ({source})", fontsize=8)
         ax.grid(True, alpha=0.25)
         ax.tick_params(labelsize=7)
@@ -273,7 +392,7 @@ def _plot_candidate_overlays(
     handles, labels = axes.flat[0].get_legend_handles_labels()
     if handles:
         fig.legend(handles, labels, loc="outside lower center", ncol=2, fontsize=8)
-    fig.suptitle("Irradiance and electrical power under recorded/provisional alignment", fontsize=11)
+    fig.suptitle("Irradiance and electrical power under recorded/end-anchored alignment", fontsize=11)
     fig.savefig(output_path, dpi=300, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
@@ -288,31 +407,62 @@ def diagnose(
     thermal = pd.read_csv(thermal_csv, dtype={"experiment_date": "string", "date": "string"})
     electrical = pd.read_csv(electrical_csv, dtype={"experiment_date": "string"}, parse_dates=["timestamp"])
     output_dir.mkdir(parents=True, exist_ok=True)
+    sample_period_audit = estimate_reference_sample_period(thermal)
+    sample_period_s = float(sample_period_audit["sample_period_s"])
     scans: dict[str, pd.DataFrame] = {}
     summaries: dict[str, dict] = {}
-    thermal_by_date = {}
-    electrical_by_date = {}
+    paired_by_date: dict[str, pd.DataFrame] = {}
+    reconstructed_days = []
+    aligned_bin_days = []
     top_rows = []
 
     dates = sorted(set(thermal["experiment_date"].dropna()) & set(electrical["experiment_date"].dropna()))
     for date in dates:
         thermal_day = thermal[thermal["experiment_date"] == date].copy()
         electrical_day = electrical[electrical["experiment_date"] == date].copy()
-        scan, _, _ = scan_candidate_offsets(thermal_day, electrical_day, bin_seconds)
+        scan, _, _ = scan_candidate_offsets(
+            thermal_day,
+            electrical_day,
+            bin_seconds,
+            sample_period_s=sample_period_s,
+        )
         assessment = _classify_candidate(scan, bin_seconds)
         direct = _direct_timestamp_score(thermal_day, electrical_day, bin_seconds)
+        aligned_timestamps, alignment_basis = reconstruct_thermal_timestamps(
+            thermal_day,
+            electrical_day,
+            sample_period_s,
+        )
+        operational, paired = _score_at_timestamps(
+            thermal_day,
+            electrical_day,
+            aligned_timestamps,
+            bin_seconds,
+        )
+        sensitivity = _alignment_sensitivity(
+            thermal_day,
+            electrical_day,
+            aligned_timestamps,
+            bin_seconds,
+        )
         electrical_end = pd.to_datetime(electrical_day["timestamp"]).max()
-        thermal_duration_s = float(thermal_day["elapsed_s"].max())
+        thermal_duration_s = float(_relative_seconds(thermal_day, sample_period_s).max())
+        electrical_duration_s = float(
+            (pd.to_datetime(electrical_day["timestamp"]).max() - pd.to_datetime(electrical_day["timestamp"]).min()).total_seconds()
+        )
         forensic = _forensic_mtime(date, raw_thermal_dir, electrical_end, thermal_duration_s)
         summaries[date] = {
             "thermal_rows": int(len(thermal_day)),
             "electrical_rows": int(len(electrical_day)),
-            "thermal_relative_duration_h": thermal_duration_s / 3600,
+            "thermal_reconstructed_duration_h": thermal_duration_s / 3600,
+            "electrical_duration_h": electrical_duration_s / 3600,
+            "duration_difference_min": (thermal_duration_s - electrical_duration_s) / 60,
             "candidate_assessment": assessment,
             "direct_timestamp_alignment": direct,
-            "primary_alignment_status": (
-                "recorded_wall_clock_available" if direct else assessment["classification"]
-            ),
+            "alignment_basis": alignment_basis,
+            "operational_alignment": operational,
+            "alignment_sensitivity": sensitivity,
+            "primary_alignment_status": alignment_basis,
             "forensic_file_time": forensic,
         }
         separated = _separated_top_candidates(scan, bin_seconds)
@@ -320,32 +470,50 @@ def diagnose(
         top_rows.append(separated)
         scan.insert(0, "experiment_date", date)
         scans[date] = scan
-        thermal_by_date[date] = thermal_day
-        electrical_by_date[date] = electrical_day
+        paired_by_date[date] = paired
+
+        reconstructed = thermal_day.copy()
+        reconstructed["aligned_timestamp"] = aligned_timestamps.to_numpy()
+        reconstructed["alignment_basis"] = alignment_basis
+        reconstructed["reference_sample_period_s"] = sample_period_s
+        reconstructed_days.append(reconstructed)
+
+        aligned_bins = paired.reset_index(names="timestamp")
+        aligned_bins.insert(0, "experiment_date", date)
+        aligned_bins.insert(1, "alignment_basis", alignment_basis)
+        aligned_bin_days.append(aligned_bins)
 
     all_candidates = pd.concat(scans.values(), ignore_index=True)
     top_candidates = pd.concat(top_rows, ignore_index=True)
     all_candidates.to_csv(output_dir / "alignment_candidate_scores.csv", index=False)
     top_candidates.to_csv(output_dir / "alignment_top_candidates.csv", index=False)
+    pd.concat(reconstructed_days, ignore_index=True).to_csv(
+        output_dir / "thermal_clock_reconstruction_v1.csv", index=False
+    )
+    pd.concat(aligned_bin_days, ignore_index=True).to_csv(
+        output_dir / "electrothermal_aligned_30s_v1.csv", index=False
+    )
     report = {
         "method": {
             "bin_seconds": bin_seconds,
+            "sample_period_audit": sample_period_audit,
             "score": "0.75 * Spearman-rank correlation(G, P) + 0.25 * correlation(smoothed first differences)",
-            "search_domain": "candidate starts that keep the complete relative thermal record inside the electrical log",
-            "interpretation": "candidate ranking only; non-timestamped days require an external clock anchor before confirmatory modeling",
+            "search_domain": "candidate starts that keep the complete fixed-period thermal record inside the electrical log",
+            "operational_rule": "Use recorded timestamps on 2026-03-17; otherwise reconstruct at the reference sampling period and anchor the final thermal sample to the final electrical timestamp.",
+            "author_confirmation": "Electrical logging was generally started first, thermal/irradiance logging later, and the two were stopped together or in close succession.",
+            "interpretation": "The end-anchored clock is a reproducible operational alignment supported by the timestamped reference day, duration agreement, file times where reliable, and the confirmed acquisition workflow. Sensitivity to residual shifts remains mandatory.",
         },
         "days": summaries,
     }
+    report = _json_safe(report)
     (output_dir / "alignment_diagnostic.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8"
     )
     _plot_scan_grid(scans, summaries, output_dir / "alignment_score_grid.png")
     _plot_candidate_overlays(
-        thermal_by_date,
-        electrical_by_date,
+        paired_by_date,
         summaries,
         output_dir / "alignment_candidate_overlays.png",
-        bin_seconds,
     )
     return report
 

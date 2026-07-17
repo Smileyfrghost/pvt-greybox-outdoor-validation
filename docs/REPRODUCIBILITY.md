@@ -52,7 +52,15 @@ python analysis/diagnose_electrothermal_alignment.py \
   --bin-seconds 30
 ```
 
-The script writes all candidate scores, separated top candidates, a JSON diagnostic, and two 300 dpi figures. Candidate ranking combines irradiance-power rank agreement and cloud-event agreement. File modification times are recorded only as forensic context and are never used in the score. Do not feed a best candidate into confirmatory modeling unless an external clock anchor and timebase check support it.
+The script estimates the normal thermal sampling period from the timestamped 2026-03-17 record (expected median 5.834 s). It retains recorded timestamps on that day; on the other days it reconstructs a fixed-period clock and anchors the final thermal record to the final electrical timestamp, following the confirmed acquisition sequence. It writes:
+
+- all candidate scores and separated top candidates;
+- a JSON diagnostic including +/-30/60/120 s sensitivity;
+- `thermal_clock_reconstruction_v1.csv` with row-level clock provenance;
+- `electrothermal_aligned_30s_v1.csv` with common 30 s bins; and
+- two 300 dpi figures.
+
+Candidate ranking combines irradiance-power rank agreement and cloud-event agreement, but is diagnostic only. It cannot overwrite recorded timestamps or the acquisition-process anchor simply because another offset has a higher correlation. File modification times are retained only as independent forensic context.
 
 ## 5. Run whole-day baselines
 
