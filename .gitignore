@@ -13,6 +13,8 @@ results/**
 # Real experiment files are deliberately excluded until release rights and a data licence are confirmed.
 data/raw/
 data/experimental_clean_v1.csv
+data/processed/
+temp/
 
 # Local/private source material
 paper/source_materials/

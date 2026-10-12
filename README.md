@@ -8,9 +8,9 @@ Reproducible data-processing and baseline modeling code for a small water-cooled
 
 **Research areas:** photovoltaic-thermal systems, solar energy, transient thermal modeling, grey-box system identification, time-series validation, and reproducible research.
 
-## Status
+## Method scope
 
-This is a scoped research companion repository, not a release of the earlier competition project. It contains audited temperature/irradiance and electrical-power pipelines, whole-day validation baselines, an electro-thermal clock-alignment diagnostic, tests, and data-quality metadata. The original measurements are not redistributed yet because data ownership and licensing still need to be confirmed.
+This code companion contains temperature/irradiance and electrical-power parsers, exploratory whole-day baselines, an early electro-thermal clock diagnostic, a minute-resolution irradiance-workbook audit, tests, and data-quality metadata. The exploratory baseline and early clock commands use historical protocols, which differ from the later frozen manuscript study. See [methods and evidence](docs/METHODS_AND_EVIDENCE.md) before interpreting outputs. Original measurements are supplied separately.
 
 The current experiment inventory comprises nine test days, 41,599 thermal/irradiance logger records, 162,844 electrical records, and two day-level flow settings (300 and 500 mL/min). Twenty-one thermal sensor-range failures and four voltage-current-power consistency failures are flagged rather than silently removed.
 
@@ -18,7 +18,7 @@ The current experiment inventory comprises nine test days, 41,599 thermal/irradi
 
 - Rebuilding the temperature/irradiance dataset from the original logger files.
 - Reconstructing a monotonic elapsed-time axis when the logger counter resets.
-- Preserving panel, tank, and inlet temperature channels without relabeling them.
+- Preserving legacy temperature-channel fields without treating their names as independently confirmed sensor locations.
 - Parsing active power, voltage, and current from all nine original instrument exports.
 - Inferring the current scale from the physical relation `P ~= V * I` while retaining header-unit conflicts in QC.
 - Reconstructing non-timestamped thermal clocks from the 5.834 s timestamped reference period and the author-confirmed common-stop acquisition sequence.
@@ -80,12 +80,15 @@ python analysis/fit_panel_temperature_models.py \
 
 See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the exact input filenames and [docs/CLAIM_BOUNDARIES.md](docs/CLAIM_BOUNDARIES.md) before interpreting results.
 
-## Planned release path
+## Irradiance workbook audit
 
-1. Confirm permission and choose a licence for the experiment data.
-2. Lock the operational clock reconstruction and timing-sensitivity protocol.
-3. Replace baseline regressions with a physically interpretable grey-box state model.
-4. Freeze a tagged release and archive it with a DOI alongside the preprint.
+```bash
+python analysis/audit_irradiance_campaign.py data/raw/irradiance results/irradiance_audit
+```
+
+Input workbooks must use minute observations and the documented W/m2, MJ/m2 and h units. `.xlsx` support uses `openpyxl`; legacy `.xls` support additionally requires `xlrd`. The script flags coverage and channel issues without modifying source files. It does not establish sensor geometry or turn station readings into panel-plane irradiance.
+
+See the [repository map](docs/REPOSITORY_MAP.md) and [Chinese entry point](README_zh.md) for file locations. Project progress and upload batches are maintained in local project-management records, not this usage README.
 
 ## Citation
 

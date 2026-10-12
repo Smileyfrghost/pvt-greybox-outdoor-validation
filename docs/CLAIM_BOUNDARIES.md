@@ -1,5 +1,7 @@
 # Claim boundaries
 
+These boundaries describe the historical code workflow. [Methods and evidence](METHODS_AND_EVIDENCE.md) explains reviewed sensor semantics and the distinct later frozen protocol. A legacy `T_inlet_C` field is not proof of a measured collector inlet.
+
 ## Supported by the current repository
 
 - Nine outdoor logger days can be parsed into a consistent temperature/irradiance schema.

@@ -1,23 +1,20 @@
 # Audited hardware specifications
 
-## PV module nameplate
+## Current PV module specification
 
-Evidence source: author-provided nameplate photograph, inspected 2026-07-17. The photograph is not redistributed in this repository.
+Evidence source: user direct correction dated 2026-09-14, supported by the confirmed same-rig manuscript.
 
-| Field | Nameplate value |
+| Field | Current value |
 |---|---:|
 | Cell/module type | Monocrystalline silicon module |
-| Model | YTXN-6M-120W |
-| Maximum power | 120 W |
-| Open-circuit voltage, Voc | 21.4 V |
-| Short-circuit current, Isc | 6.80 A |
-| Maximum-power voltage, Vmp | 18 V |
-| Maximum-power current, Imp | 6.67 A |
-| Maximum system voltage | DC 1000 V |
-| Operating temperature | -40 to +80 degC |
-| Dimensions | 1200 x 540 x 30 mm |
-| Standard test condition | AM1.5, 1000 W/m2, 25 degC |
+| Maximum power | 100 W |
+| Effective illuminated area | 0.55 m2 |
+| Model, dimensions, Voc/Isc/Vmp/Imp | Not yet confirmed for the current module |
 
-The face area is 0.648 m2. Dividing 120 W by 1000 W/m2 times this area gives a nameplate conversion efficiency of approximately 18.5%. This is a standard-test-condition rating, not an outdoor measured efficiency.
+Dividing 100 W by 1000 W/m2 times 0.55 m2 gives a reference conversion efficiency of approximately 18.18%. This is a rating-area calculation, not an outdoor measured efficiency.
 
-The model should use the full 0.648 m2 module area and the 120 W nameplate rating without an additional packing multiplier above one. Voc, Isc, Vmp, and Imp are reference checks; they do not replace an outdoor I--V curve or maximum-power-point measurement.
+The model should use `Ac=0.55 m2`, `Pmax_ref=100 W`, and no additional packing multiplier above one. Current-module Voc, Isc, Vmp and Imp remain unknown and do not get inherited from the obsolete record.
+
+## Obsolete historical record
+
+An author-provided photograph inspected on 2026-07-17 showed YTXN-6M-120W, 120 W, 21.4 V/6.80 A, 18 V/6.67 A and 1200 x 540 x 30 mm (0.648 m2 gross area). The user explicitly stated on 2026-09-14 that 120 W/0.648 m2 was not accurate for the current rig. These fields are retained only to explain prior code and reports; they must not be used as current inputs.
