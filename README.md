@@ -23,7 +23,7 @@ The current experiment inventory comprises nine test days, 41,599 thermal/irradi
 - Inferring the current scale from the physical relation `P ~= V * I` while retaining header-unit conflicts in QC.
 - Reconstructing non-timestamped thermal clocks from the 5.834 s timestamped reference period and the author-confirmed common-stop acquisition sequence.
 - Reporting correlation-ranked alternatives and +/-30/60/120 s timing sensitivity without allowing correlation to overwrite physical clock anchors.
-- Comparing modest static and dynamic baselines using leave-one-day-out evaluation.
+- Comparing Persistence, Static OLS and ARX on separate prediction tasks with gap-safe histories and day-level training splits.
 - Recording limitations and quality-control decisions in machine-readable form.
 
 It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. One thermal day contains wall-clock timestamps; the remaining clocks are operational reconstructions based on its stable sampling period and the confirmed acquisition sequence, and must retain timing-sensitivity analysis.
@@ -75,10 +75,13 @@ To evaluate whole-day baselines:
 ```bash
 python analysis/fit_panel_temperature_models.py \
   --dataset data/processed/experimental_clean_v1.csv \
-  --output-dir results/panel_temperature_baselines
+  --output-dir results/exploratory_baselines_v2 \
+  --step-s 60 --allow-legacy-clock
 ```
 
 See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the exact input filenames and [docs/CLAIM_BOUNDARIES.md](docs/CLAIM_BOUNDARIES.md) before interpreting results.
+
+The baseline clock acknowledgement is for historical diagnostics only. For reviewed clocks, explicit date splits and task-specific scoring, see [the baseline comparison contract](docs/BASELINE_COMPARISON.md). The runner does not replay the frozen manuscript coefficients.
 
 ## Irradiance workbook audit
 

@@ -62,16 +62,16 @@ The script estimates the normal thermal sampling period from the timestamped 202
 
 Candidate ranking combines irradiance-power rank agreement and cloud-event agreement, but is diagnostic only. It cannot overwrite recorded timestamps or the acquisition-process anchor simply because another offset has a higher correlation. File modification times are retained only as independent forensic context.
 
-## 5. Run whole-day baselines
+## 5. Run exploratory baseline comparisons
 
 ```bash
 python analysis/fit_panel_temperature_models.py \
   --dataset data/processed/experimental_clean_v1.csv \
-  --output-dir results/panel_temperature_baselines \
-  --step-s 10
+  --output-dir results/exploratory_baselines_v2 \
+  --step-s 60 --allow-legacy-clock
 ```
 
-Each experiment day is held out in turn. Report per-day errors before any aggregate mean because weather, initial conditions, flow setting, and experiment duration vary substantially across days.
+This acknowledges the legacy operational clock for a diagnostic only. The runner compares Persistence, Static OLS and a fixed-structure ARX, separately for contemporaneous, one-step, fixed-horizon and segment free-run tasks. It splits invalid rows and gaps before interpolation, excludes initialization and preserves whole-day separation across all parts. See [BASELINE_COMPARISON.md](BASELINE_COMPARISON.md) for explicit dates, reviewed timestamp inputs, eligibility and output contracts. These are refitted exploratory baselines, not frozen manuscript replay.
 
 ## 6. Audit minute-resolution irradiance workbooks
 
