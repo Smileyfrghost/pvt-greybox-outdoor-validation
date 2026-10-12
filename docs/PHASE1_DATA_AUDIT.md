@@ -1,5 +1,7 @@
 # Phase 1 data audit and operational alignment
 
+> **2026-09-14 correction:** The user directly confirmed that the current rig is rated at **100 W** with **0.55 m2 effective area**. The earlier YTXN-6M-120W photograph, 120 W, 0.648 m2, dimensions and associated Voc/Isc/Vmp/Imp values below are retained only as historical audit evidence and are not current-rig specifications. The active configuration has been corrected; all dependent legacy LUTs, simulations, figures and reports are stale until regenerated. This correction does not release the channel, clock, operating-condition or physical-validation gates.
+
 Audit date: 2026-07-17. Alignment revision: 2026-07-17 after author confirmation of the acquisition sequence.
 
 ## Outcome
