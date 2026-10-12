@@ -4,6 +4,8 @@
 
 The parsers retain the nine-day source inventory and its quality-control flags. The alignment diagnostic reconstructs an operational clock from a timestamped reference period and a common-stop assumption. The baseline script evaluates exploratory leave-one-day-out regressions. These commands reproduce their own historical workflow; they do not implement the later frozen manuscript protocol.
 
+The maintained baseline entry now fits Persistence/Static OLS/ARX comparisons with gap-safe segments and separate contemporaneous, one-step, conditional-horizon and free-run scores. See [BASELINE_COMPARISON.md](BASELINE_COMPARISON.md). The earlier clipped, mixed-task baseline implementation remains in Git history; its results must not be silently relabelled as outputs of the repaired runner.
+
 Names in an old export schema are not independent sensor identification. `T_inlet_C` is a legacy parser field and must not be treated as a confirmed collector-inlet measurement. Refer to the reviewed sensor map before assigning a thermal boundary condition.
 
 ## Frozen temperature-model study

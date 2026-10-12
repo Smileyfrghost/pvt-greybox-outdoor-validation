@@ -29,7 +29,7 @@
 | 温度和辐照度解析 | `scripts/build_experimental_dataset.py` |
 | 电量解析 | `scripts/build_electrical_dataset.py` |
 | 早期时钟与偏移诊断 | `analysis/diagnose_electrothermal_alignment.py` |
-| 探索性整日留一日基线 | `analysis/fit_panel_temperature_models.py` |
+| 分任务 Persistence / Static OLS / ARX 比较 | `analysis/fit_panel_temperature_models.py`（兼容入口）、`analysis/baseline_comparison.py` |
 | 天气工作簿覆盖率与辐照变化检查 | `analysis/audit_irradiance_campaign.py` |
 | 命令与目录 | [复现指南](docs/REPRODUCIBILITY.md)、[仓库地图](docs/REPOSITORY_MAP.md) |
 
@@ -40,3 +40,5 @@ python analysis/audit_irradiance_campaign.py data/raw/irradiance results/irradia
 ```
 
 天气脚本预期一分钟观测，瞬时辐照 W/m2，累计辐照 MJ/m2，日照时 h；`.xlsx` 使用 `openpyxl`，旧 `.xls` 另需 `xlrd`。它不确定仪表朝向，不把天气站读数自动转换成板面辐照。最终论文以实测板中心 T1 为目标，水箱温度和格点环境气温按代理输入解释。
+
+基线默认60s；使用旧`elapsed_s`须显式加`--allow-legacy-clock`，仅作为探索诊断。新版在缺测、质量失败、事件分段与长缺口处断开历史；一步、固定时域、整段递推和静态估计分开评分，保留不稳定输出而不裁剪，不再给混合任务总排名。使用规范见[基线比较说明](docs/BASELINE_COMPARISON.md)，后期冻结模型仍属独立协议。
