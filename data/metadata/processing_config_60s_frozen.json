@@ -1,0 +1,168 @@
+{
+  "version": "2026-09-15_native_qc_model_ready_60s_v1_frozen",
+  "timezone": "Asia/Shanghai",
+  "aggregation": {
+    "window_seconds": 60,
+    "method": "arithmetic_mean",
+    "minimum_fraction_valid": 0.8,
+    "no_interpolation_for_insufficient_windows": true,
+    "group_boundaries": [
+      "pump_state",
+      "electrical_mode",
+      "intervention",
+      "retained_or_excluded_boundary",
+      "clock_segment",
+      "known_anomaly_interval"
+    ]
+  },
+  "automatic_flags_only": {
+    "temperature_impossible_jump_C_per_native_step": 15.0,
+    "irradiance_impossible_jump_W_m2_per_native_step": 600.0,
+    "frozen_run_min_samples": 120,
+    "long_gap_seconds": 10.0,
+    "temperature_review_range_C": [
+      -40.0,
+      120.0
+    ],
+    "irradiance_review_range_W_m2": [
+      0.0,
+      1600.0
+    ]
+  },
+  "common": {
+    "flow_when_on_mL_min": 500,
+    "tank_capacity_L": 10,
+    "water_volume_L": 8,
+    "Tin_proxy_rule": "Tin_estimated equals measured tank temperature only when pump is on; source must be tank_temperature_assumption",
+    "weather_integration": "archived_raw_not_integrated",
+    "raw_inputs_read_only": true,
+    "frozen_inputs_read_only": true
+  },
+  "days": {
+    "2026-03-16": {
+      "role": "zero_flow_thermal_loss_and_inertia_reference",
+      "pump_rule": "off_all_day",
+      "flow_mL_min": 0,
+      "electrical_mode_boundary": "2026-03-16 14:00:00",
+      "transition_start": "2026-03-16 13:56:10",
+      "transition_end": "2026-03-16 13:59:39",
+      "model_ready_use": true,
+      "identification_use": true,
+      "validation_use": false
+    },
+    "2026-03-17": {
+      "role": "fixed_load_cross_condition",
+      "pump_rule": "on_all_day",
+      "flow_mL_min": 500,
+      "electrical_mode": "fixed_load_participant_confirmed",
+      "analysis_end": "2026-03-17 14:01:26",
+      "model_ready_use": true,
+      "identification_use": true,
+      "validation_use": false
+    },
+    "2026-03-18": {
+      "role": "thermal_only_auxiliary",
+      "pump_rule": "on_after_retained_start",
+      "flow_mL_min": 500,
+      "analysis_start": "2026-03-18 09:00:00",
+      "electrical_trusted": false,
+      "model_ready_use": true,
+      "identification_use": false,
+      "validation_use": false,
+      "identification_policy": "pending_modeling_protocol"
+    },
+    "2026-03-19": {
+      "role": "primary_identification_candidate",
+      "pump_rule": "on_all_day",
+      "flow_mL_min": 500,
+      "electrical_mode": "mppt_participant_confirmed",
+      "analysis_start": "2026-03-19 09:00:00",
+      "model_ready_use": true,
+      "identification_use": true,
+      "validation_use": false
+    },
+    "2026-03-20": {
+      "role": "diagnostic_only",
+      "pump_rule": "sample_boundary",
+      "pump_event_sample": 1803,
+      "pump_event_time_quality": "aligned_candidate",
+      "electrical_state_event_times": [
+        "2026-03-20 11:05:00",
+        "2026-03-20 11:11:13",
+        "2026-03-20 12:54:51"
+      ],
+      "model_ready_use": false,
+      "identification_use": false,
+      "validation_use": false,
+      "diagnostic_only": true
+    },
+    "2026-03-21": {
+      "role": "dynamic_pump_event_day",
+      "pump_rule": "sample_boundary",
+      "pump_event_sample": 723,
+      "pump_event_time_quality": "aligned_candidate",
+      "electrical_mode": "mppt_participant_confirmed",
+      "analysis_end": "2026-03-21 15:29:07.516121",
+      "model_ready_use": true,
+      "identification_use": true,
+      "validation_use": false
+    },
+    "2026-03-22": {
+      "role": "reject_forensic_only",
+      "mapping_status": "REVIEW",
+      "model_ready_use": false,
+      "identification_use": false,
+      "validation_use": false,
+      "reject": true
+    },
+    "2026-03-25": {
+      "role": "initial_condition_transient_perturbation",
+      "pump_rule": "on_all_day",
+      "flow_mL_min": 500,
+      "electrical_mode": "mppt_participant_confirmed",
+      "analysis_start": "2026-03-25 11:57:00",
+      "initial_condition_event": true,
+      "high_initial_Tpv": true,
+      "model_ready_use": true,
+      "identification_use": true,
+      "validation_use": false
+    },
+    "2026-03-26": {
+      "role": "measurement_intervention_split",
+      "pump_rule": "on_all_day",
+      "flow_mL_min": 500,
+      "electrical_mode": "mppt_participant_confirmed",
+      "analysis_end": "2026-03-26 17:20:55",
+      "intervention_boundary_sample": 1820,
+      "intervention_boundary_time": "2026-03-26 11:51:25.165839",
+      "intervention_previous_sample": 1819,
+      "intervention_previous_time": "2026-03-26 11:51:19.168099",
+      "intervention_type": "measurement/intervention boundary",
+      "intervention_confidence": "participant_confirmed_boundary",
+      "model_ready_use": true,
+      "identification_use": false,
+      "validation_use": "post_segment_only",
+      "model_selection_use": false,
+      "tuning_use": false,
+      "sensitivity_analysis_use": true,
+      "pre_segment_use": "sensitivity_analysis_only",
+      "post_segment_use": "held_out_validation"
+    }
+  },
+  "final_freeze": {
+    "status": "participant_confirmed_frozen",
+    "freeze_timestamp": "2026-09-16T09:00:16.189274+08:00",
+    "boundary_name": "measurement/intervention boundary",
+    "boundary_previous_sample": 1819,
+    "boundary_previous_time": "2026-03-26 11:51:19.168099",
+    "boundary_first_post_sample": 1820,
+    "boundary_first_post_time": "2026-03-26 11:51:25.165839",
+    "pre_segment": "326_pre_intervention",
+    "post_segment": "326_post_intervention",
+    "pre_use": "sensitivity_analysis_only",
+    "post_use": "held_out_validation",
+    "model_selection_use_2026_03_26": false,
+    "tuning_use_2026_03_26": false,
+    "validation_feedback_prohibited": true
+  }
+}

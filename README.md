@@ -26,7 +26,7 @@ The current experiment inventory comprises nine test days, 41,599 thermal/irradi
 - Comparing Persistence, Static OLS and ARX on separate prediction tasks with gap-safe histories and day-level training splits.
 - Recording limitations and quality-control decisions in machine-readable form.
 
-It does **not** support measured thermal power or thermal-efficiency claims because no outlet-water temperature was logged. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. One thermal day contains wall-clock timestamps; the remaining clocks are operational reconstructions based on its stable sampling period and the confirmed acquisition sequence, and must retain timing-sensitivity analysis.
+It does **not** support measured thermal power or thermal-efficiency claims: the early parser fields do not establish a reviewed collector inlet/outlet temperature pair, and the later outlet-side local sensor is not a complete calorimetric measurement chain. Flow is a day-level setting, not a measured time series. Ambient temperature and wind are absent from the March logger. One thermal day contains wall-clock timestamps; the remaining clocks are operational reconstructions based on its stable sampling period and the confirmed acquisition sequence, and must retain timing-sensitivity analysis.
 
 ## Repository layout
 
@@ -82,6 +82,18 @@ python analysis/fit_panel_temperature_models.py \
 See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the exact input filenames and [docs/CLAIM_BOUNDARIES.md](docs/CLAIM_BOUNDARIES.md) before interpreting results.
 
 The baseline clock acknowledgement is for historical diagnostics only. For reviewed clocks, explicit date splits and task-specific scoring, see [the baseline comparison contract](docs/BASELINE_COMPARISON.md). The runner does not replay the frozen manuscript coefficients.
+
+## Reviewed 60 s input interface
+
+The [60 s interface contract](docs/MODEL_READY_60S.md) provides the original frozen processing configuration, semantic channel/proxy definitions and an invented example table. Check it without original measurements:
+
+```bash
+python analysis/check_model_ready_60s.py \
+  --dataset data/examples/synthetic_model_ready_60s.csv \
+  --output results/synthetic_60s_interface/report.json
+```
+
+This checks already reviewed table consistency, not raw preprocessing, model fitting or frozen manuscript results.
 
 ## Irradiance workbook audit
 

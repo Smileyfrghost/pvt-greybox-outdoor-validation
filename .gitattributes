@@ -6,3 +6,4 @@
 *.toml text eol=lf
 *.json text eol=lf
 *.cff text eol=lf
+data/metadata/processing_config_60s_frozen.json -text whitespace=cr-at-eol

@@ -1,0 +1,43 @@
+{
+  "release_batch": "02",
+  "prepared_date": "2026-10-14",
+  "sources": [
+    {
+      "project_relative_path": "pvt_data_pipeline/runs/2026-09-15_native_qc_model_ready_60s_v1_frozen/processing_config.json",
+      "sha256": "542d0b58e5cb4ec87f41f6bc646b90610da68f19d38d40ec138a60be2aa63259",
+      "bytes": 5867
+    },
+    {
+      "project_relative_path": "pvt_data_pipeline/runs/2026-09-15_native_qc_model_ready_60s_v1_frozen/build_native_qc_model_ready.py",
+      "sha256": "bb32d6f6aecbfd8d40fa09bef04a8cb073ef5b02f058e5505118cb94c575ad00",
+      "bytes": 62641
+    },
+    {
+      "project_relative_path": "pvt_data_pipeline/runs/2026-09-16_weather_integration_v1/weather_integration_report.md",
+      "sha256": "fafc135a1525ede6ce3e187e2f2b86c14ef07fbd3af4279e8933a27b94e67078",
+      "bytes": 4128
+    },
+    {
+      "project_relative_path": "pvt_identification/config/mapping_review.csv",
+      "sha256": "6fb358eab3a36c6942a831f768be1b9fdc638f947722fb239522174e4dbe18ec",
+      "bytes": 3727
+    },
+    {
+      "project_relative_path": "pvt_identification/FINAL_PROJECT_CLAIMS.md",
+      "sha256": "d29a0b8b5230338db442c5f9718b40bc21af972ca311b8c007ff8ab35f074292",
+      "bytes": 12839
+    }
+  ],
+  "copied_byte_for_byte": {
+    "source": "pvt_data_pipeline/runs/2026-09-15_native_qc_model_ready_60s_v1_frozen/processing_config.json",
+    "public_path": "data/metadata/processing_config_60s_frozen.json"
+  },
+  "new_portable_files": [
+    "analysis/check_model_ready_60s.py",
+    "data/metadata/model_ready_60s_contract.json",
+    "data/examples/synthetic_model_ready_60s.csv",
+    "tests/test_model_ready_60s.py",
+    "docs/MODEL_READY_60S.md"
+  ],
+  "scope": "Configuration and reviewed-table interface only; native QC/aggregation/weather implementation and measured data are NOT included; no model refit or frozen metric replay."
+}
