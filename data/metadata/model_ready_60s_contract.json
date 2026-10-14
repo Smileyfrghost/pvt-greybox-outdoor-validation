@@ -1,0 +1,35 @@
+{
+  "contract_version": "public-interface-v1",
+  "timezone": "Asia/Shanghai",
+  "target": "T_panel_center",
+  "model_inputs": ["G", "Tamb", "T_tank_measured", "P", "flow_mL_min"],
+  "required_columns": ["date", "window_start", "window_end", "aggregation_segment", "pump_state", "quality_flag", "n_expected_samples", "n_raw_samples", "n_valid_samples", "fraction_valid", "model_ready_use", "identification_use", "validation_use", "model_selection_use", "tuning_use", "sensitivity_analysis_use", "diagnostic_only", "event_boundary_window", "contains_review_required_native", "T_panel_center", "T_tank_measured", "G", "Tamb", "P", "flow_mL_min"],
+  "boolean_columns": ["model_ready_use", "identification_use", "validation_use", "model_selection_use", "tuning_use", "sensitivity_analysis_use", "diagnostic_only", "event_boundary_window", "contains_review_required_native"],
+  "held_out_date": "2026-03-26",
+  "final_model_training_dates": ["2026-03-17", "2026-03-19", "2026-03-25"],
+  "internal_validation_date": "2026-03-21",
+  "role_warning": "Preprocessing identification_use denotes a permitted pool, not the final model fitting split. 03-21 informed ARX selection and is not its unseen holdout.",
+  "channels": {
+    "T_panel_center": {"unit": "degC", "evidence": "measured panel-center temperature T1"},
+    "T_tank_measured": {"unit": "degC", "evidence": "measured tank-water temperature; conditional water-side proxy, NOT measured collector inlet"},
+    "Tamb": {"unit": "degC", "evidence": "gridded 2 m ambient-air-temperature proxy, NOT onsite measurement"},
+    "G": {"unit": "W/m2", "evidence": "reviewed irradiance channel, not a measured absorbed heat flux"},
+    "P": {"unit": "W", "evidence": "reviewed electrical active power; model heat-subtraction assumption is separate"},
+    "flow_mL_min": {"unit": "mL/min", "evidence": "participant-prescribed operating flow, NOT a measured flow time series"}
+  },
+  "native_temperature_map": {
+    "2026-03-16": {"panel": "T1", "tank": "T3", "outlet_side_local": "T2"},
+    "2026-03-17": {"panel": "T1", "tank": "T3", "outlet_side_local": "T2"},
+    "2026-03-19": {"panel": "T1", "tank": "T3", "outlet_side_local": "T2"},
+    "2026-03-20": {"panel": "T1", "tank": "T3", "outlet_side_local": "T2"},
+    "2026-03-21": {"panel": "T1", "tank": "T3", "outlet_side_local": "T2"},
+    "2026-03-25": {"panel": "T1", "tank": "T2", "outlet_side_local": "T3"},
+    "2026-03-26": {"panel": "T1", "tank": "T2", "outlet_side_local": "T3"}
+  },
+  "mapping_exclusions": {"2026-03-18": "thermal-only auxiliary; no automatic physical mapping", "2026-03-22": "REJECT; no model-ready rows"},
+  "clock_quality": "accepted candidate alignment; not independently calibrated synchronization",
+  "aggregation_semantics": "60 s arithmetic means, minimum fraction 0.8; preserve event/QC audit rows; no interpolation of insufficient experimental windows",
+  "weather_mapping": "hourly provider temperature time-linearly interpolated at experimental window midpoint; no extrapolation; missing or >1.5 native-interval bracket stays missing",
+  "weather_source_limit": "Archived source states IFS; exact model selector/version and API URL were not preserved",
+  "scientific_scope": "interface checking only; no raw QC rebuild, parameter replay, prediction scoring, or physical validation"
+}

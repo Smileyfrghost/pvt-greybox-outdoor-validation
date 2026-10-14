@@ -1,0 +1,15 @@
+date,window_start,window_end,aggregation_segment,pump_state,quality_flag,n_expected_samples,n_raw_samples,n_valid_samples,fraction_valid,model_ready_use,identification_use,validation_use,model_selection_use,tuning_use,sensitivity_analysis_use,diagnostic_only,event_boundary_window,contains_review_required_native,T_panel_center,T_tank_measured,G,Tamb,P,flow_mL_min
+2026-03-17,2026-03-17 10:00:00,2026-03-17 10:01:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,30,22,400,20,25,500
+2026-03-17,2026-03-17 10:01:00,2026-03-17 10:02:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,31,22.1,420,20.1,26,500
+2026-03-17,2026-03-17 10:02:00,2026-03-17 10:03:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,32,22.2,440,20.2,27,500
+2026-03-17,2026-03-17 10:03:00,2026-03-17 10:04:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,33,22.3,460,20.3,28,500
+2026-03-17,2026-03-17 10:04:00,2026-03-17 10:05:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,34,22.4,480,20.4,29,500
+2026-03-17,2026-03-17 10:05:00,2026-03-17 10:06:00,synthetic_train,on,good,10,10,10,1,true,true,false,true,true,false,false,false,false,35,22.5,500,20.5,30,500
+2026-03-17,2026-03-17 10:06:00,2026-03-17 10:07:00,synthetic_event,on,event_boundary_window;insufficient_data,10,5,5,0.5,false,false,false,false,false,false,false,true,false,36,22.6,520,20.6,31,500
+2026-03-26,2026-03-26 11:45:00,2026-03-26 11:46:00,326_pre_intervention_synthetic,on,insufficient_data,10,5,5,0.5,false,false,false,false,false,true,false,false,false,40,24,600,21,35,500
+2026-03-26,2026-03-26 12:00:00,2026-03-26 12:01:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,42,25,700,22,40,500
+2026-03-26,2026-03-26 12:01:00,2026-03-26 12:02:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,43,25.1,720,22.1,41,500
+2026-03-26,2026-03-26 12:02:00,2026-03-26 12:03:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,44,25.2,740,22.2,42,500
+2026-03-26,2026-03-26 12:03:00,2026-03-26 12:04:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,45,25.3,760,22.3,43,500
+2026-03-26,2026-03-26 12:04:00,2026-03-26 12:05:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,46,25.4,780,22.4,44,500
+2026-03-26,2026-03-26 12:05:00,2026-03-26 12:06:00,326_post_intervention_synthetic,on,good,10,10,10,1,true,false,true,false,false,true,false,false,false,47,25.5,800,22.5,45,500
