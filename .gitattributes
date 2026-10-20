@@ -7,3 +7,6 @@
 *.json text eol=lf
 *.cff text eol=lf
 data/metadata/processing_config_60s_frozen.json -text whitespace=cr-at-eol
+data/metadata/frozen_baselines/baseline_model_parameters.json -text whitespace=cr-at-eol
+data/metadata/frozen_baselines/baseline_protocol_v1_1.json -text whitespace=cr-at-eol
+data/examples/frozen_baseline_synthetic.csv -text whitespace=cr-at-eol

@@ -36,7 +36,7 @@ The weather derivative linearly interpolates archived hourly provider temperatur
 
 ## Data roles versus model roles
 
-The copied configuration and its `identification_use` describe preprocessing eligibility in a candidate pool. They do not define the final fitted sample. The later frozen study uses 03-17/19/25 pump-on training days, 03-21 internal validation, and the reviewed 03-26 post-intervention support for final held-out evaluation. 03-21 also informed ARX selection, so it is not an unseen ARX test. 03-26 pre-intervention material is sensitivity-only; 03-26 must not enable fitting, model selection or tuning.
+The copied configuration and its `identification_use` describe preprocessing eligibility in a candidate pool. They do not define the final fitted sample. Grey-box v1 uses 03-17/19/25 pump-on training days; frozen Static/ARX additionally include the zero-flow 03-16 day. The retained `final_model_training_dates` contract field refers only to grey-box v1. The study uses 03-21 internal validation and reviewed 03-26 post-intervention support for final held-out evaluation. 03-21 also informed ARX selection, so it is not an unseen ARX test. 03-26 pre-intervention material is sensitivity-only; 03-26 must not enable fitting, model selection or tuning. See [frozen baseline replay](FROZEN_BASELINE_REPLAY.md) for the fixed coefficients and external-support interface.
 
 `model_ready_use` is neither fitting permission nor proof of physical correctness. This checker distinguishes declared preprocessing eligibility from complete model inputs and only reports continuity counts. It neither chooses training samples nor supplies frozen model coefficients/support masks. Those belong to later release batches.
 

@@ -7,6 +7,8 @@
   "boolean_columns": ["model_ready_use", "identification_use", "validation_use", "model_selection_use", "tuning_use", "sensitivity_analysis_use", "diagnostic_only", "event_boundary_window", "contains_review_required_native"],
   "held_out_date": "2026-03-26",
   "final_model_training_dates": ["2026-03-17", "2026-03-19", "2026-03-25"],
+  "final_model_training_dates_scope": "Grey-box v1 only; this retained compatibility field does not define frozen Static/ARX fitting data.",
+  "frozen_baseline_training_dates": ["2026-03-16", "2026-03-17", "2026-03-19", "2026-03-25"],
   "internal_validation_date": "2026-03-21",
   "role_warning": "Preprocessing identification_use denotes a permitted pool, not the final model fitting split. 03-21 informed ARX selection and is not its unseen holdout.",
   "channels": {

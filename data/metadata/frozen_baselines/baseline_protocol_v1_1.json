@@ -1,0 +1,104 @@
+{
+  "name": "baseline_protocol_v1.1",
+  "revision_from": "baseline_protocol_v1",
+  "revision_reason": "training-design identifiability only: with n_b=2, the two flow-lag columns were exactly identical in frozen training experiments; no 3.21 performance motivated this change",
+  "target": "T1 / T_panel_center",
+  "sampling_seconds": 60,
+  "inputs": {
+    "G": "G",
+    "Tamb": "Tamb",
+    "Ttank": "T_tank_measured",
+    "Pel": "P",
+    "flow": "flow_mL_min"
+  },
+  "training_days": [
+    "2026-03-16",
+    "2026-03-17",
+    "2026-03-19",
+    "2026-03-25"
+  ],
+  "internal_validation_day": "2026-03-21",
+  "final_held_out_test_day": "2026-03-26",
+  "static": "ordinary least squares; contemporaneous conditional regression",
+  "arx_equation_timing": "For target y[t]=y[k+1], nk=0 uses u[k]; nk=1 uses u[k-1]. B lags continue backward by one minute.",
+  "arx_grid": [
+    {
+      "n_a": 1,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 1,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 1
+    },
+    {
+      "n_a": 1,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 1,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 1
+    },
+    {
+      "n_a": 2,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 2,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 1
+    },
+    {
+      "n_a": 2,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 2,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 1
+    },
+    {
+      "n_a": 3,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 3,
+      "n_b_nonflow": 1,
+      "n_b_flow": 1,
+      "n_k": 1
+    },
+    {
+      "n_a": 3,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 0
+    },
+    {
+      "n_a": 3,
+      "n_b_nonflow": 2,
+      "n_b_flow": 1,
+      "n_k": 1
+    }
+  ],
+  "arx_reparameterization": "flow retains exactly one coefficient at lag target-1-n_k; G, Tamb, Ttank and Pel retain n_b in {1,2}",
+  "selection": "3.21 common-support pooled free-run RMSE primary; rank-deficient candidates are ineligible; stable candidates only when available; within 0.05 C prefer fewer parameters then lower orders; MAE, absolute Bias and segment-safe one-step residual ACF are secondary",
+  "common_evaluation_support": "All models score target indices t >= 3 in every independent 3.21 segment; N_common=383.",
+  "initialization": "All 3.21 free runs use the first 3 measured outputs per segment as one common start buffer; no measured output correction after scoring begins.",
+  "scaling": "Output/input means and population standard deviations computed from training experiments only and applied unchanged to 3.21.",
+  "blind_test": "Reader stops before first 2026-03-26 row; no performance evaluation before grey-box freeze."
+}
