@@ -1,0 +1,74 @@
+{
+  "batch": "03",
+  "status": "LOCAL_PREPARATION_NOT_UPLOADED",
+  "byte_preserved_files": [
+    {
+      "public_name": "baseline_model_parameters.json",
+      "source_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/baseline_model_parameters.json",
+      "sha256": "9a0149c2c11d4beedb4f9f12e1232dfcbdf15358b3b1918ed93fe8be6e6ab4d9"
+    },
+    {
+      "public_name": "baseline_protocol_v1_1.json",
+      "source_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/baseline_protocol_v1_1.json",
+      "sha256": "9a712c25b4a01446d4763a6d1e72502ccfb32e0c701d6111dacd42b49133ab8e"
+    }
+  ],
+  "source_files": [
+    {
+      "project_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/baseline_model_parameters.json",
+      "sha256": "9a0149c2c11d4beedb4f9f12e1232dfcbdf15358b3b1918ed93fe8be6e6ab4d9",
+      "bytes": 3452
+    },
+    {
+      "project_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/baseline_protocol_v1_1.json",
+      "sha256": "9a712c25b4a01446d4763a6d1e72502ccfb32e0c701d6111dacd42b49133ab8e",
+      "bytes": 2996
+    },
+    {
+      "project_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/run_baseline_v1_1.py",
+      "sha256": "2bf95f2c52f39f7d061ab19bd6c9e0ce9bb2da3965cc14161b9c46d6c71c669b",
+      "bytes": 57990
+    },
+    {
+      "project_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/evaluate_finite_horizons_v1_1.py",
+      "sha256": "d0bd3f2aa8ba3a8f56bc2a23532bcf2b65e6eeb5d841b0a0e7323685d0bc8ea1",
+      "bytes": 17610
+    },
+    {
+      "project_relative_path": "pvt_baseline/runs/2026-09-16_baseline_v1_1_model_execution/baseline_freeze_manifest_v1_1.json",
+      "sha256": "dd904f41d63c54a35ce7d3ece3cb9e14f324356fb9a67c5d0238ca5fd3b91449",
+      "bytes": 5000
+    },
+    {
+      "project_relative_path": "pvt_data_pipeline/runs/2026-09-16_weather_integration_v1/model_ready_60s_weather_v1.csv",
+      "sha256": "eaf1b31ce73ac6380e06276b910bb573f572417281622c5704a9173730fce84f",
+      "bytes": 2935323
+    },
+    {
+      "project_relative_path": "pvt_identification/validation_321_v1/segment_support.json",
+      "sha256": "c9c43aa668a3387bd905ad5597f018ccbc37d5a7de224cd83860ca849a44c7d6",
+      "bytes": 6782
+    },
+    {
+      "project_relative_path": "pvt_identification/validation_321_v1/validation_2026_03_21_predictions_v1.csv",
+      "sha256": "38a1f884253a796790ef6013cf9102f5a13216968aa4e7e8e2468a915cf8dbc8",
+      "bytes": 1432606
+    },
+    {
+      "project_relative_path": "pvt_identification/validation_321_v1/validation_2026_03_21_metrics_v1.csv",
+      "sha256": "3ba04629f2d3ec9b75fad4c6d73794a3dc477f209dd9a64aa335d59b6233a583",
+      "bytes": 10334
+    },
+    {
+      "project_relative_path": "pvt_identification/validation_321_v1/validation_2026_03_21_horizon_metrics_v1.csv",
+      "sha256": "9e9169a32277a32133440fc3202a16237ef368d7c2aacb35b60e2977bae0858b",
+      "bytes": 21177
+    },
+    {
+      "project_relative_path": "pvt_identification/FINAL_PROJECT_CLAIMS.md",
+      "sha256": "d29a0b8b5230338db442c5f9718b40bc21af972ca311b8c007ff8ab35f074292",
+      "bytes": 12839
+    }
+  ],
+  "scope": "Fixed-parameter replay only; private 03-21 observations/references stay outside the repository; no 03-26 replay, fitting or selection."
+}

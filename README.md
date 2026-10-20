@@ -95,6 +95,8 @@ python analysis/check_model_ready_60s.py \
 
 This checks already reviewed table consistency, not raw preprocessing, model fitting or frozen manuscript results.
 
+Fixed baseline coefficients can be replayed without fitting using the [frozen baseline interface](docs/FROZEN_BASELINE_REPLAY.md). It requires explicit, hash-locked row/segment/target support. The bundled example is entirely invented; raw experimental data and the full held-out package are not included.
+
 ## Irradiance workbook audit
 
 ```bash
