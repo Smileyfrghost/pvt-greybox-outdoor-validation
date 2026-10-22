@@ -1,0 +1,56 @@
+{
+  "artifact_type": "source_map_for_fixed_greybox_equation",
+  "public_files": [
+    {
+      "name": "shared_theta_frozen_v1.json",
+      "sha256": "b8960db460a08e66a5af0170b766d58829e2f51379a091a9784217520dcb6158"
+    },
+    {
+      "name": "model_contract.json",
+      "sha256": "a86314718305756b70ec301bba1c5cdaa768cdb56150a1d47b4fc9b4f3a7b824"
+    }
+  ],
+  "source_files": [
+    {
+      "project_relative_path": "pvt_greybox/runs/2026-09-16_identification_v1/shared_theta_frozen_v1.json",
+      "sha256": "b8960db460a08e66a5af0170b766d58829e2f51379a091a9784217520dcb6158",
+      "bytes": 516
+    },
+    {
+      "project_relative_path": "pvt_greybox/runs/2026-09-16_identification_v1/engine_v1.py",
+      "sha256": "c3f008174cc3cc2509495937b93344a6a6e37a02447295c75e67150a19d3eb01",
+      "bytes": 4192
+    },
+    {
+      "project_relative_path": "pvt_greybox/runs/2026-09-16_identification_v1/greybox_protocol_v1_approved.md",
+      "sha256": "f5203d1456013a84c817de5eded50195eba35130dc626cbca16f2f2aab26a8ca",
+      "bytes": 2276
+    },
+    {
+      "project_relative_path": "pvt_greybox/runs/2026-09-16_identification_v1/shared_diagnostics_v1.json",
+      "sha256": "e1186e8bd394163ecc33a524f57e5b2e683b5201e01b8c0ae7ed0c2724d8bf7e",
+      "bytes": 8126
+    },
+    {
+      "project_relative_path": "pvt_greybox/protocol_v1/greybox_model_spec_v1.json",
+      "sha256": "ff97c330cbf12873c0cd4f52dbf22935c73b233034cbe5ec8d73e2e989c41328",
+      "bytes": 15696
+    },
+    {
+      "project_relative_path": "pvt_greybox/protocol_v1/test_equation_contract_v1.py",
+      "sha256": "2d562f367313cd9a1f1f43d958a960bd159a66e47b6e0f99174d94cb4ec48666",
+      "bytes": 3755
+    },
+    {
+      "project_relative_path": "pvt_identification/FINAL_PROJECT_CLAIMS.md",
+      "sha256": "d29a0b8b5230338db442c5f9718b40bc21af972ca311b8c007ff8ab35f074292",
+      "bytes": 12839
+    }
+  ],
+  "parameter_copy": {
+    "source": "pvt_greybox/runs/2026-09-16_identification_v1/shared_theta_frozen_v1.json",
+    "public_name": "shared_theta_frozen_v1.json",
+    "byte_preserved": true
+  },
+  "scope": "Equation/software provenance, not current protocol approval, new fitting authorization or physical validation"
+}

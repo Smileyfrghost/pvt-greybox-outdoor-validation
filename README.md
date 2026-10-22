@@ -97,6 +97,18 @@ This checks already reviewed table consistency, not raw preprocessing, model fit
 
 Fixed baseline coefficients can be replayed without fitting using the [frozen baseline interface](docs/FROZEN_BASELINE_REPLAY.md). It requires explicit, hash-locked row/segment/target support. The bundled example is entirely invented; raw experimental data and the full held-out package are not included.
 
+## Frozen grey-box equation
+
+The [one-state grey-box module](docs/GREYBOX_MODEL.md) supplies the original fixed shared parameters and exact-ZOH thermal update, without identification or observation scoring:
+
+```bash
+python analysis/frozen_greybox.py \
+  --input data/examples/greybox_synthetic_segments.json \
+  --output-dir results/greybox_synthetic
+```
+
+The example is fully invented. Effective-parameter interpretation remains identifiability-limited; the complete held-out scoring package is separate.
+
 ## Irradiance workbook audit
 
 ```bash
