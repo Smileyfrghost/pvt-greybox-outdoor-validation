@@ -55,3 +55,13 @@ python analysis/check_model_ready_60s.py --dataset data/examples/synthetic_model
 接口只检查已审查表的时间窗、有效比例、角色互斥、排除边界和输入连续性，不重建原始QC、不拟合模型、不重放论文冻结结果。`model_ready_use`不是拟合许可，最终训练日与预处理可用池必须分开。T2/T3物理身份随日期变化，`Tamb`为格点2m气温代理，水箱温度不是实测集热器入口温度。详见[60s接口说明](docs/MODEL_READY_60S.md)。
 
 另有[冻结基线回放入口](docs/FROZEN_BASELINE_REPLAY.md)，只载入已有系数与显式哈希锁定的行/段/评分对，不重新拟合。冻结Static/ARX训练包含3.16、3.17、3.19、3.25；grey-box仅后三个泵ON日。合成例完全虚构，不代表完整论文或3.26验证已复现。
+
+## 一状态grey-box方程
+
+[冻结grey-box模块](docs/GREYBOX_MODEL.md)提供原共享参数、60s精确ZOH更新和计算契约测试；不拟合、不选模、不评分实测记录。合成示例命令：
+
+```bash
+python analysis/frozen_greybox.py --input data/examples/greybox_synthetic_segments.json --output-dir results/greybox_synthetic
+```
+
+有效参数仍为可辨识性受限，不能解释为已确认的不变物性或传热系数。OFF/ON仅支持既有0/500mL/min设置；每段独立初始化。完整留出验证支持及指标回放属于后续独立包。

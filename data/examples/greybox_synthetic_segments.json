@@ -1,0 +1,9 @@
+{
+  "schema": "greybox-segments-v1",
+  "sampling_seconds": 60,
+  "provenance": "Entirely invented segment inputs/initial states; no measured experiment or scoring data",
+  "segments": [
+    {"id": "synthetic_pump_on", "initial_temperature_C": 35, "inputs": [[700, 20, 24, 45, 500], [800, 20, 24, 50, 500], [500, 21, 25, 30, 500], [300, 21, 25, 20, 500]]},
+    {"id": "synthetic_pump_off_independent", "initial_temperature_C": 30, "inputs": [[0, 20, null, 0, 0], [0, 20, null, 0, 0], [100, 20, null, 5, 0]]}
+  ]
+}
